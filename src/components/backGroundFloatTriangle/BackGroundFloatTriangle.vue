@@ -193,7 +193,7 @@ export default {
       )
 
     },
-    triangleDisappear() {
+    triangleDisappear(Duration) {
       const triangleListLength = this.floatTriangles.length  // 获取三角形列表的长度
       if (triangleListLength > 0){  // 如果大于零
         const oneOfTriangleList = Math.floor(Math.random() * triangleListLength)  // 三角形列表中随机选一个
@@ -210,16 +210,11 @@ export default {
             triangleDisappearFrameList.push(grayFrameAndNothingnessFrame[grayFrameOrNothingnessFrame]) // 将其添加至 关键帧列表
           }
 
-          // 生成随机动画持续时间
-          const minTriangleDisappearAnimeDuration = 400
-          const maxTriangleDisappearAnimaDuration = 700
-          const triangleDisappearAnimeDuration = Math.floor(Math.random() * (maxTriangleDisappearAnimaDuration - minTriangleDisappearAnimeDuration) + minTriangleDisappearAnimeDuration)
-
           // 消失动画
           disappearTriangle.animate(
               triangleDisappearFrameList,
               {
-                duration: triangleDisappearAnimeDuration,
+                duration: Duration,
                 easing: 'ease-in-out',
                 iterations: Infinity,
                 direction: 'alternate'
@@ -231,7 +226,7 @@ export default {
           setTimeout(() => {
             disappearTriangle.remove()
             _this.floatTriangles.splice(oneOfTriangleList, 1)
-          }, triangleDisappearAnimeDuration)
+          }, Duration)
 
         }
       }
@@ -248,20 +243,28 @@ export default {
       // 给三角形应用动画
       _this.trianglesAnimate()
 
-      const AppearAndDisappearSpeedMin = 2200
-      const AppearAndDisappearSpeedMax = 3800
+      // 移除或添加三角形的随机时间
+      const AppearAndDisappearSpeedMin = 22000
+      const AppearAndDisappearSpeedMax = 38000
       const AppearAndDisappearSpeed = Math.round( Math.random() * (AppearAndDisappearSpeedMax - AppearAndDisappearSpeedMin) + AppearAndDisappearSpeedMin )
-      // 每隔25s移除一个元素
+      const AppearAndAppearSpeed = Math.round( Math.random() * (AppearAndDisappearSpeedMax - AppearAndDisappearSpeedMin) + AppearAndDisappearSpeedMin )
+
+      // 闪烁动画持续时间
+      const minTriangleDisappearAnimeDuration = 400
+      const maxTriangleDisappearAnimaDuration = 700
+      const triangleDisappearAnimeDuration = Math.floor(Math.random() * (maxTriangleDisappearAnimaDuration - minTriangleDisappearAnimeDuration) + minTriangleDisappearAnimeDuration)
+
+      // 移除一个元素
       setInterval(() => {
-        _this.triangleDisappear()
+        _this.triangleDisappear(triangleDisappearAnimeDuration)
       }, AppearAndDisappearSpeed)
 
-      // 每隔25s生成一个元素
+      // 生成一个元素
       setInterval(() => {
         const newTriangleBoxId = _this.createTriangleBox(boxCount++)
         const newTriangleBox = document.getElementById(newTriangleBoxId)
         _this.triangleAnimate(newTriangleBox, false)
-      }, AppearAndDisappearSpeed)
+      }, AppearAndAppearSpeed + triangleDisappearAnimeDuration)
 
     },
   },
