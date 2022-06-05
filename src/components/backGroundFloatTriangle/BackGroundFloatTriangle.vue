@@ -14,9 +14,6 @@ export default {
   },
   methods: {
     createTriangleBox(triangleIndex) {
-
-      console.log('aaaaaaaaaa');
-
       // 获取屏幕尺寸 get page size
       const pageHeight = document.body.clientHeight ?? document.documentElement.clientHeight
       const pageWidth = document.body.clientWidth ?? document.documentElement.clientWidth
@@ -106,106 +103,102 @@ export default {
         )
       }
 
-          // 三角形变形动画随机播放速度
-          const minTrianglePointAnimeDuration = 18000
-          const maxTrianglePointAnimaDuration = 23000
-          const trianglePointAnimeDuration = Math.floor( Math.random() * (maxTrianglePointAnimaDuration - minTrianglePointAnimeDuration) + minTrianglePointAnimeDuration )
+      // 三角形变形动画随机播放速度
+      const minTrianglePointAnimeDuration = 18000
+      const maxTrianglePointAnimaDuration = 23000
+      const trianglePointAnimeDuration = Math.floor( Math.random() * (maxTrianglePointAnimaDuration - minTrianglePointAnimeDuration) + minTrianglePointAnimeDuration )
 
-          // 三角形顶点的随机坐标（动画开始）
-          const minPoint1AnimeStartDegree = 0
-          const maxPoint1AnimeStartDegree = 15
-          const point1AnimeStartDegree = Math.floor( Math.random() * (maxPoint1AnimeStartDegree - minPoint1AnimeStartDegree) + minPoint1AnimeStartDegree )
-          // 三角形顶点的随机坐标（动画结束）
-          const minPoint1AnimeEndDegree = 15
-          const maxPoint1AnimeEndDegree = 30
-          const point1AnimeEndDegree = Math.floor( Math.random() * (maxPoint1AnimeEndDegree - minPoint1AnimeEndDegree) + minPoint1AnimeEndDegree )
+      // 三角形顶点的随机坐标（动画开始）
+      const minPoint1AnimeStartDegree = 0
+      const maxPoint1AnimeStartDegree = 15
+      const point1AnimeStartDegree = Math.floor( Math.random() * (maxPoint1AnimeStartDegree - minPoint1AnimeStartDegree) + minPoint1AnimeStartDegree )
+      // 三角形顶点的随机坐标（动画结束）
+      const minPoint1AnimeEndDegree = 15
+      const maxPoint1AnimeEndDegree = 30
+      const point1AnimeEndDegree = Math.floor( Math.random() * (maxPoint1AnimeEndDegree - minPoint1AnimeEndDegree) + minPoint1AnimeEndDegree )
 
-          // 三角形顶点的随机坐标（动画开始）
-          const minPoint2AnimeStartDegree = 0
-          const maxPoint2AnimeStartDegree = 15
-          const point2AnimeStartDegree = Math.floor( Math.random() * (maxPoint2AnimeStartDegree - minPoint2AnimeStartDegree) + minPoint2AnimeStartDegree )
-          // 三角形顶点的随机坐标（动画结束）
-          const minPoint2AnimeEndDegree = 75
-          const maxPoint2AnimeEndDegree = 90
-          const point2AnimeEndDegree = Math.floor( Math.random() * (maxPoint2AnimeEndDegree - minPoint2AnimeEndDegree) + minPoint2AnimeEndDegree )
+      // 三角形顶点的随机坐标（动画开始）
+      const minPoint2AnimeStartDegree = 0
+      const maxPoint2AnimeStartDegree = 15
+      const point2AnimeStartDegree = Math.floor( Math.random() * (maxPoint2AnimeStartDegree - minPoint2AnimeStartDegree) + minPoint2AnimeStartDegree )
+      // 三角形顶点的随机坐标（动画结束）
+      const minPoint2AnimeEndDegree = 75
+      const maxPoint2AnimeEndDegree = 90
+      const point2AnimeEndDegree = Math.floor( Math.random() * (maxPoint2AnimeEndDegree - minPoint2AnimeEndDegree) + minPoint2AnimeEndDegree )
 
-          // 三角形顶点的随机坐标（动画开始）
-          const minPoint3AnimeStartDegree = 90
-          const maxPoint3AnimeStartDegree = 100
-          const point3AnimeStartDegree = Math.floor( Math.random() * (maxPoint3AnimeStartDegree - minPoint3AnimeStartDegree) + minPoint3AnimeStartDegree )
-          // 三角形顶点的随机坐标（动画结束）
-          const minPoint3AnimeEndDegree = 75
-          const maxPoint3AnimeEndDegree = 90
-          const point3AnimeEndDegree = Math.floor( Math.random() * (maxPoint3AnimeEndDegree - minPoint3AnimeEndDegree) + minPoint3AnimeEndDegree )
+      // 三角形顶点的随机坐标（动画开始）
+      const minPoint3AnimeStartDegree = 90
+      const maxPoint3AnimeStartDegree = 100
+      const point3AnimeStartDegree = Math.floor( Math.random() * (maxPoint3AnimeStartDegree - minPoint3AnimeStartDegree) + minPoint3AnimeStartDegree )
+      // 三角形顶点的随机坐标（动画结束）
+      const minPoint3AnimeEndDegree = 75
+      const maxPoint3AnimeEndDegree = 90
+      const point3AnimeEndDegree = Math.floor( Math.random() * (maxPoint3AnimeEndDegree - minPoint3AnimeEndDegree) + minPoint3AnimeEndDegree )
 
-          // 增加三角形尺寸变化的动画
-          triangleBox.animate(
-              [
-                {
-                  clipPath: `polygon(0 ${point1AnimeStartDegree}%, 100% ${point2AnimeStartDegree}%, 0 ${point3AnimeStartDegree}%)`
-                },
-                {
-                  clipPath: `polygon(0 ${point1AnimeEndDegree}%, 100% ${point2AnimeEndDegree}%, 0 ${point3AnimeEndDegree}%)`
-                }
-              ],
-              {
-                duration: trianglePointAnimeDuration,
-                easing: 'ease-in-out',
-                iterations: Infinity,
-                direction: 'alternate'
-              }
-          )
-
-
-          // 随机动画播放延迟
-          // const minAnimeDelay = 500
-          // const maxAnimaDelay = 1000
-          // const animeDelay = Math.floor( Math.random() * (maxAnimaDelay - minAnimeDelay) + minAnimeDelay )
-
-          // 三角形位移动画随机播放速度
-          const minTriangleTransformAnimeDuration = 45000
-          const maxTriangleTransformAnimaDuration = 55000
-          const triangleTransformAnimeDuration = Math.floor( Math.random() * (maxTriangleTransformAnimaDuration - minTriangleTransformAnimeDuration) + minTriangleTransformAnimeDuration )
-
-          // 在做位移动画前，先获取到 element 原有的 transform 参数
-          const triangleDefaultTransform = triangleBox.style.transform
-
-          const triangleTranslateStartOffset = -200
-          const triangleTranslateStart = Math.random() * + triangleTranslateStartOffset
-
-          const triangleTranslateEndOffset = 200
-          const triangleTranslateEnd = Math.random() * + triangleTranslateEndOffset
+      // 增加三角形尺寸变化的动画
+      triangleBox.animate(
+          [
+            {
+              clipPath: `polygon(0 ${point1AnimeStartDegree}%, 100% ${point2AnimeStartDegree}%, 0 ${point3AnimeStartDegree}%)`
+            },
+            {
+              clipPath: `polygon(0 ${point1AnimeEndDegree}%, 100% ${point2AnimeEndDegree}%, 0 ${point3AnimeEndDegree}%)`
+            }
+          ],
+          {
+            duration: trianglePointAnimeDuration,
+            easing: 'ease-in-out',
+            iterations: Infinity,
+            direction: 'alternate'
+          }
+      )
 
 
-          // 增加三角形位移变化的动画
-          triangleBox.animate(
-              [
-                {
-                  transform: `${triangleDefaultTransform} translate(${triangleTranslateStart}px, ${triangleTranslateStart}px)`,
-                },
-                {
-                  transform: `${triangleDefaultTransform} translate(${triangleTranslateEnd}px, ${triangleTranslateEnd}px)`
-                }
-              ],
-              {
-                duration: triangleTransformAnimeDuration,
-                // easing: 'ease-in-out',
-                iterations: Infinity,
-                direction: 'alternate'
-              }
-          )
+      // 随机动画播放延迟
+      // const minAnimeDelay = 500
+      // const maxAnimaDelay = 1000
+      // const animeDelay = Math.floor( Math.random() * (maxAnimaDelay - minAnimeDelay) + minAnimeDelay )
+
+      // 三角形位移动画随机播放速度
+      const minTriangleTransformAnimeDuration = 45000
+      const maxTriangleTransformAnimaDuration = 55000
+      const triangleTransformAnimeDuration = Math.floor( Math.random() * (maxTriangleTransformAnimaDuration - minTriangleTransformAnimeDuration) + minTriangleTransformAnimeDuration )
+
+      // 在做位移动画前，先获取到 element 原有的 transform 参数
+      const triangleDefaultTransform = triangleBox.style.transform
+
+      const triangleTranslateStartOffset = -200
+      const triangleTranslateStart = Math.random() * + triangleTranslateStartOffset
+
+      const triangleTranslateEndOffset = 200
+      const triangleTranslateEnd = Math.random() * + triangleTranslateEndOffset
+
+
+      // 增加三角形位移变化的动画
+      triangleBox.animate(
+          [
+            {
+              transform: `${triangleDefaultTransform} translate(${triangleTranslateStart}px, ${triangleTranslateStart}px)`,
+            },
+            {
+              transform: `${triangleDefaultTransform} translate(${triangleTranslateEnd}px, ${triangleTranslateEnd}px)`
+            }
+          ],
+          {
+            duration: triangleTransformAnimeDuration,
+            // easing: 'ease-in-out',
+            iterations: Infinity,
+            direction: 'alternate'
+          }
+      )
 
     },
-
     triangleDisappear() {
-      const triangleListLength = this.floatTriangles.length
-      if (triangleListLength > 0){
-        console.log('triangleListLength', triangleListLength)
-        const oneOfTriangleList = Math.floor(Math.random() * triangleListLength)
-        console.log(oneOfTriangleList);
+      const triangleListLength = this.floatTriangles.length  // 获取三角形列表的长度
+      if (triangleListLength > 0){  // 如果大于零
+        const oneOfTriangleList = Math.floor(Math.random() * triangleListLength)  // 三角形列表中随机选一个
         const disappearTriangle = document.getElementById(this.floatTriangles[oneOfTriangleList])  // 获取一个倒霉蛋
-        if (disappearTriangle !== undefined && disappearTriangle !== null) {
-
+        if (disappearTriangle !== undefined && disappearTriangle !== null) {  // 判断是否获取到 dom
           // 生成随机帧序列
           const grayFrameAndNothingnessFrame = [{backgroundColor: 'var(--float-triangle-color)'}, {backgroundColor: 'var(--nothingness)'}] // 正常帧和空白帧
           const numberOfFramesMin = 7  // 最小总关键帧数
@@ -234,7 +227,7 @@ export default {
           )
 
           const _this = this
-          // 动画结束后将其移除 dom
+          // 动画结束后将其从 dom 和 三角形列表 中删除
           setTimeout(() => {
             disappearTriangle.remove()
             _this.floatTriangles.splice(oneOfTriangleList, 1)
@@ -243,7 +236,6 @@ export default {
         }
       }
     },
-
     initTriangle() {
 
       const _this = this
@@ -274,21 +266,7 @@ export default {
     },
   },
   mounted() {
-
-    const _this = this
-    _this.initTriangle()
-
-
-    // setInterval(() => {
-    //   const elem = document.getElementById('float-triangle-box')
-    //   while(elem.hasChildNodes()) //当elem下还存在子节点时 循环继续
-    //   {
-    //     elem.removeChild(elem.firstChild);
-    //   }
-    //   _this.initTriangle()
-    // }, 20000)
-
-
+    this.initTriangle()
   }
 }
 </script>
