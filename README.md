@@ -1,6 +1,6 @@
 # sao_fans_client
 
-[demo](sao-fans-client.vercel.app)
+[demo](sao-fans-client.vercel.app) (this demo is borke)
 
 ## Project setup
 ```
