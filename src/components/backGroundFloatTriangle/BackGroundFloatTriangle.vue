@@ -32,7 +32,7 @@ export default {
       if (pageWidth / pageHeight > minRatio) {  // 如果屏幕比例大于 1.5 则
         if (pageWidth / pageHeight > 2) {  // 判断是否大于2，如果大于2则取2
           screenRatio = 2
-        } else {  // 如果小于2则取真是比例
+        } else {  // 如果小于2则取真实比例
           screenRatio = pageWidth / pageHeight
         }
       } else {  // 否则如果小于 1.5 则取 1.5
@@ -44,8 +44,9 @@ export default {
       // 三角形盒子的尺寸
       const HeightProportion = 1.2
       const WidthProportion = 8
-      const triangleBoxHeight = pageHeight / (Math.random() + HeightProportion)
-      const triangleBoxWidth = triangleBoxHeight / (Math.random() + WidthProportion) * screenRatioOffset
+      const triangleBoxHeightGrayscale = (Math.random() + HeightProportion)  // 生成随机的高度影响因子
+      const triangleBoxHeight = pageHeight / triangleBoxHeightGrayscale // 根据影响因子计算出真实高度
+      const triangleBoxWidth = triangleBoxHeight / (Math.random() + WidthProportion) * screenRatioOffset  // 生成随机的宽度影响因子，与屏幕比例偏置数相加后除以三角形高度
       const triangleBoxSize = `height: ${triangleBoxHeight}px; width: ${triangleBoxWidth}px;`
 
       // 三角形盒子的位置
@@ -53,12 +54,22 @@ export default {
       const triangleBoxPositionTop =  (Math.random() * pageHeight) - (triangleBoxHeight / 2)
       const triangleBoxPosition = `position: fixed; left: ${triangleBoxPositionLeft}px; top: ${triangleBoxPositionTop}px;`
 
+      // 三角形盒子的随机不透明度
+      const bigTriangleBoxOpacityMin =  0.02  // 生成大三角不同透明度最低值
+      const bigTriangleBoxOpacityMax =  0.08  // 生成大三角不同透明度最高值
+      const smallTriangleBoxOpacityMin =  0.11  // 生成小三角不同透明度最低值
+      const smallTriangleBoxOpacityMax =  0.18  // 生成小三角不同透明度最高值
+      const smallTriangleBoxOpacityList =  [[bigTriangleBoxOpacityMin, bigTriangleBoxOpacityMax],[smallTriangleBoxOpacityMin, smallTriangleBoxOpacityMax]]  // 将 大三角不透明度区间 和 小三角不透明度区间 放入数组
+      const realSmallTriangleBoxOpacity = triangleBoxHeightGrayscale < 1.6 ? smallTriangleBoxOpacityList[0] : smallTriangleBoxOpacityList[1]  // 根据三角形高度影响因子，小于 1.6 使用 大三角不透明度区间， 反之使用 小三角不透明度区间
+      const triangleBoxOpacityValue = Math.random() * ( realSmallTriangleBoxOpacity[1] - realSmallTriangleBoxOpacity[0] ) + realSmallTriangleBoxOpacity[0]  // 在区间中生成一个随机值
+      const triangleBoxOpacity = `opacity: ${triangleBoxOpacityValue};`  // 拼接不透明度 css 属性
+
       // 三角形盒子的角度
       const triangleAngleNumber = Math.random() * 360  // circle is 360°
       const triangleAngle = `transform: rotate(${triangleAngleNumber}deg);`
 
       // 设置样式 set style
-      triangle.setAttribute('style', `${triangleBoxSize} ${triangleBoxPosition} ${triangleAngle} background-color: var(--float-triangle-color);`)
+      triangle.setAttribute('style', `${triangleBoxSize} ${triangleBoxPosition} ${triangleAngle} ${triangleBoxOpacity} background-color: var(--float-triangle-color);`)
 
       // 绘制装三角形的盒子 draw triangleBox
       const triangleBox = document.getElementById('float-triangle-box')
@@ -144,7 +155,6 @@ export default {
       const point3AnimeEndDegree = Math.floor( Math.random() * (maxPoint3AnimeEndDegree - minPoint3AnimeEndDegree) + minPoint3AnimeEndDegree )
 
       const chooseAnimeKeyFrame = Math.floor(Math.random() * 5)  // 生成 0-4的一个随机数
-      console.log('chooseAnimeKeyFrame', chooseAnimeKeyFrame)
       const animeKeyFrameList = [  // 生成两种不同的动画
         [
           {
@@ -163,7 +173,7 @@ export default {
           }
         ],
       ]
-      const animeKeyFrame = chooseAnimeKeyFrame < 4 ?  animeKeyFrameList[0] : animeKeyFrameList[0]  // 有 4/5 的概率使用动画0 有 1/5 的概率使用动画1
+      const animeKeyFrame = chooseAnimeKeyFrame < 3 ?  animeKeyFrameList[0] : animeKeyFrameList[0]  // 有 3/5 的概率使用动画0 有 2/5 的概率使用动画1
 
       // 增加三角形尺寸变化的动画
       triangleBox.animate(

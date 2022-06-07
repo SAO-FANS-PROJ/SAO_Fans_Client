@@ -1,15 +1,19 @@
 <template>
   <div class="main-back-ground">
     <back-ground-flex-triangle/>
+    <role-hexagon/>
   </div>
 </template>
 
 <script>
 import backGroundFlexTriangle from "@/components/backGroundFloatTriangle/BackGroundFloatTriangle";
+import roleHexagon from "@/components/roleHexagon/RoleHexagon";
 export default {
   name: 'Home',
   components: {
-    backGroundFlexTriangle
+    backGroundFlexTriangle,
+    roleHexagon
+
   }
 }
 </script>
