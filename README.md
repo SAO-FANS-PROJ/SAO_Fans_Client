@@ -1,5 +1,8 @@
 # sao_fans_client
 
+基于 `Web Animation API`
+创造最好的浏览器动画！
+
 [demo](https://sao-fans-client.vercel.app)    
 [演示](https://sao-fans-client.vercel.app) 
 
