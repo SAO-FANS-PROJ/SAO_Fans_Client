@@ -1,6 +1,6 @@
 # sao_fans_client
 
-练手，做个 SAO 的网站
+练手，做个 SAO 的网站   
 基于 `Web Animation API`   
 目标：创造最好的浏览器动画！
 
