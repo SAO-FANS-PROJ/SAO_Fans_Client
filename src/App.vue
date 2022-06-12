@@ -40,9 +40,21 @@ body{
   --MAX-SCREEN-HEIGHT: 100vh;
   --MAX-SCREEN-WIDTH: 100vw;
 
-  --HEXAGON-BOX-HEIGHT: 400px;
+  //hexagon part
+  --HEXAGON-BOX-HEIGHT: clamp(100px, calc((25vh + 8vw) / 2), 180px);
+  --TOP-HEXAGON-BOX-TOP: clamp(90px, calc((20vh + 5vw) / 2), 150px) ;
+  --BOTTOM-HEXAGON-BOX-TOP: calc( var(--TOP-HEXAGON-BOX-TOP) + var(--HEXAGON-BOX-HEIGHT) - ( var(--HEXAGON-BOX-HEIGHT) * 0.2 ) );
 
-  --HEXAGON-HEIGHT: 200px;
-  --HEXAGON-WIDTH: calc( var(--HEXAGON-HEIGHT) * 0.9 )
+  --HEXAGON-HEIGHT: var(--HEXAGON-BOX-HEIGHT);
+  --HEXAGON-WIDTH: calc( var(--HEXAGON-HEIGHT) * 0.9 );
+
+  --HEXAGON-MARGIN-RIGHT: clamp(5px, 0.5vw, 20px);
+
+  --BOTTOM-HEXAGON-BOX-OFFSET: calc( var(--HEXAGON-WIDTH) / -2 );
+  --TOP-HEXAGON-BOX-OFFSET: calc( var(--HEXAGON-MARGIN-RIGHT) / 2 );
+
+  --BOTTOM-HEXAGON-BOX-WIDTH: calc( 100vw - var(--BOTTOM-HEXAGON-BOX-OFFSET))
+
+
 }
 </style>
