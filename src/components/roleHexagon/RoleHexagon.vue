@@ -43,7 +43,7 @@ export default {
         const roleHexagonClipPath = `clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);`
         const roleHexagonBgColor = `background-color: var(--hexagon-gray);`
 
-        const roleHexagonOpacity = `opacity: 0`
+        const roleHexagonOpacity = `opacity: 0.01`  // 不透明度最低值 0.01 可以避免图形完全透明导致重绘  
 
         // 设置六边形样式 set style
         roleHexagon.setAttribute('style', `${roleHexagonFloat} ${roleHexagonMarginRight} ${roleHexagonWidth} ${roleHexagonHeight} ${roleHexagonClipPath} ${roleHexagonBgColor} ${roleHexagonOpacity}`)
@@ -77,15 +77,15 @@ export default {
 
     },
     hexagonAppearAnimation(hexagonDom, animeDelay) {
-      // 绘制淡入动画
+      // 绘制淡入动画, 0.01 和 0.99 可以避免图形完全透明和完全不透明导致的重绘
       if(hexagonDom !== undefined && hexagonDom !== null) {
         hexagonDom.animate(
           [
             {
-              opacity: 0
+              opacity: 0.01
             },
             {
-              opacity: 1
+              opacity: 0.99
             }
           ],
           {

@@ -69,7 +69,7 @@ export default {
       const triangleAngle = `transform: rotate(${triangleAngleNumber}deg);`
 
       // 设置样式 set style
-      triangle.setAttribute('style', `${triangleBoxSize} ${triangleBoxPosition} ${triangleAngle} ${triangleBoxOpacity} background-color: var(--float-triangle-color);`)
+      triangle.setAttribute('style', `${triangleBoxSize} ${triangleBoxPosition} ${triangleAngle} ${triangleBoxOpacity} background-color: var(--almost-float-triangle-color);`)
 
       // 绘制装三角形的盒子 draw triangleBox
       const triangleBox = document.getElementById('float-triangle-box')
@@ -94,7 +94,7 @@ export default {
       // init 为 true 时不会有出现动画
       if(init !== true) {
         // 生成随机帧序列
-        const grayFrameAndNothingnessFrame = [{backgroundColor: 'var(--float-triangle-color)'}, {backgroundColor: 'var(--nothingness)'}] // 正常帧和空白帧
+        const grayFrameAndNothingnessFrame = [{backgroundColor: 'var(--almost-float-triangle-color)'}, {backgroundColor: 'var(--almost-nothingness)'}] // 正常帧和空白帧
         const numberOfFramesMin = 7  // 最小总关键帧数
         const numberOfFramesMax = 12  // 最大总关键帧数
         const numberOfFrames = Math.floor(Math.random() * (numberOfFramesMax - numberOfFramesMin) + numberOfFramesMin)  // 生成随机关键帧数
@@ -103,7 +103,7 @@ export default {
           const grayFrameOrNothingnessFrame = Math.round(Math.random())  // 随机选择 正常帧 和 空白帧 中的一个作为关键帧
           triangleDisappearFrameList.push(grayFrameAndNothingnessFrame[grayFrameOrNothingnessFrame]) // 将其添加至 关键帧列表
         }
-        triangleDisappearFrameList.push(grayFrameAndNothingnessFrame[0])  // 结尾帧一定是有颜色的帧
+        triangleDisappearFrameList.push(grayFrameAndNothingnessFrame[0])  // 在结尾添加一个有颜色的帧，让动画结尾帧一定是有颜色的帧
 
         // 生成随机动画持续时间
         const minTriangleDisappearAnimeDuration = 400
@@ -234,7 +234,7 @@ export default {
         const disappearTriangle = triangleListList[oneOfTriangleList] // 获取一个倒霉蛋
         if (disappearTriangle !== undefined && disappearTriangle !== null) {  // 判断是否获取到 dom
           // 生成随机帧序列
-          const grayFrameAndNothingnessFrame = [{backgroundColor: 'var(--float-triangle-color)'}, {backgroundColor: 'var(--nothingness)'}] // 正常帧和空白帧
+          const grayFrameAndNothingnessFrame = [{backgroundColor: 'var(--almost-float-triangle-color)'}, {backgroundColor: 'var(--almost-nothingness)'}] // 正常帧和空白帧
           const numberOfFramesMin = 7  // 最小总关键帧数
           const numberOfFramesMax = 12  // 最大总关键帧数
           const numberOfFrames = Math.floor(Math.random() * (numberOfFramesMax - numberOfFramesMin) + numberOfFramesMin)  // 生成随机关键帧数

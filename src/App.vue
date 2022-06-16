@@ -25,9 +25,11 @@ body{
 
   --transparent: #00000000;
   --nothingness: #00000000;
+  --almost-nothingness: #00000001;
 
   // triangle part
   --float-triangle-color: #000000FF;
+  --almost-float-triangle-color: #000000FE;
 
   // hexagon part
   --hexagon-gray: #656565FF;
