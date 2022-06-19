@@ -16,7 +16,16 @@ export default {
   name: "RoleHexagon",
   data: () => {
     return {
-
+      roleInfos: [{
+        roleId: 0,
+        roleName: 'Kirito',
+        roleImg: 'https://www.swordart-online.net/aincrad/assets/img/chara/big/01_kirito.png'
+      },{
+        roleId: 1,
+        roleName: 'Asuna',
+        roleImg: 'https://www.swordart-online.net/aincrad/assets/img/chara/big/02_asuna.png'
+      },
+      ]
     }
   },
   methods: {
@@ -115,8 +124,48 @@ export default {
         )
       }
     },
+    drawRoles() {
+      // 先正序获取所有六边形的dom，然后再遍历dom添加角色的图片
+      let hexagonDomList = []
+      let hexagonStartIndex = 1  // 遍历六边形的开始索引  （因为第 0 个六边形被屏幕挡住了一半，所以从第 1 个六边形开始）
+      for (let i = hexagonStartIndex; ; i++) {
+        const hexagonDom = document.getElementById(`role-hexagon-${i}`)
+        if (hexagonDom !== undefined && hexagonDom !== null) {
+          hexagonDomList.push(hexagonDom)
+        } else {
+          break;
+        }
+      }
+
+      for (let i = 0; i < hexagonDomList.length; i++) {
+        const animeDelay = i * 50  // 每个六边形的动画间隔时间
+        this.drawRole(hexagonDomList[i], animeDelay, this.roleInfos[i])
+      }
+    },
+    drawRole(dom, animeDelay, roleInfo) {
+
+
+
+
+      // 判断 dom 存在
+      if (dom !== undefined && dom !== null) {
+
+        if (roleInfo !== undefined && roleInfo !== null) {
+          console.log('aaaaaaaaaaaa', [dom, animeDelay, roleInfo])
+          dom.style.backgroundImage = `url('${roleInfo.roleImg} ')`
+          dom.style.backgroundSize = '300%'
+          dom.style.backgroundPosition = '40% -5%'
+          dom.style.backgroundRepeat = 'no-repeat'
+        }
+
+
+      }
+
+
+
+    },
     initRoleHexagon() {
-      for (let i = 0; i<40; i++) {
+      for (let i = 0; i<this.roleInfos.length+40; i++) {
         if (i % 2 === 1) {
           this.drawHexagon(1,i)
         } else {
@@ -125,6 +174,7 @@ export default {
       }
 
       this.hexagonsAppearAnimation()
+      this.drawRoles()
     }
   },
   mounted() {
