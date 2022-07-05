@@ -42,6 +42,8 @@ body{
   --MAX-SCREEN-HEIGHT: 100vh;
   --MAX-SCREEN-WIDTH: 100vw;
 
+  --REALLY-LONG: 100000px;
+
   //hexagon part
   --HEXAGON-BOX-HEIGHT: clamp(100px, calc((28vh + 10vw) / 2), 25vh);
   --TOP-HEXAGON-BOX-TOP: clamp(90px, calc((20vh + 5vw) / 2), 15vh) ;
