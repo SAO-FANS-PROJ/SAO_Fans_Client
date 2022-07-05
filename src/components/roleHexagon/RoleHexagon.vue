@@ -168,7 +168,7 @@ export default {
         const roleImageBoxLeft = `calc(( var(--HEXAGON-MARGIN-RIGHT) + var(--HEXAGON-WIDTH) ) * ${Math.floor(realIndex / 2)})`  // index 除 2 后向下取整，再乘以六边形宽度，得出偏置宽度
         const roleImageBoxPosition = `position: absolute; bottom: 0px; left: ${roleImageBoxLeft};`
         const roleImageBoxClip = 'clip-path: polygon(0% 0%, 100% 0%, 100% 90%, 50% 100%, 0% 90%);'
-        const roleImageBoxBackgroundImage = `background-image: url(${role.roleImg}); background-repeat: no-repeat;  cover;`
+        const roleImageBoxBackgroundImage = `background-image: url(${role.roleImg}); background-repeat: no-repeat;`
         let roleImageBoxBackgroundImageSize = 'background-size: 300%;'
         if (role.imgSize !== '' && role.imgSize !== null && role.imgSize !== undefined) {
           roleImageBoxBackgroundImageSize = `background-size: ${role.imgSize};`
