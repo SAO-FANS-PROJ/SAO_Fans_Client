@@ -21,6 +21,8 @@ body{
 
 // @color
 body{
+  --white: white;
+
   --main-background-color: #EEEEEEFF;
 
   --transparent: #00000000;
@@ -32,7 +34,12 @@ body{
   --almost-float-triangle-color: #000000FE;
 
   // hexagon part
-  --hexagon-gray: #656565FF;
+  --hexagon-gray-opaque: #656565FE;
+  --hexagon-gray: #65656550;
+  --hexagon-gray-transparent: #65656501;
+
+  // loading page part
+  --loading-page-background-color: #F7F6F4FF
 }
 
 // @size
@@ -57,8 +64,15 @@ body{
   --BOTTOM-HEXAGON-BOX-OFFSET: calc( var(--HEXAGON-WIDTH) / -2 );
   --TOP-HEXAGON-BOX-OFFSET: calc( var(--HEXAGON-MARGIN-RIGHT) / 2 );
 
-  --BOTTOM-HEXAGON-BOX-WIDTH: calc( 100vw - var(--BOTTOM-HEXAGON-BOX-OFFSET))
+  --BOTTOM-HEXAGON-BOX-WIDTH: calc( 100vw - var(--BOTTOM-HEXAGON-BOX-OFFSET));
 
 
+  // loading page part
+  --LOADING-TEXT-TOP: 30vh;
+}
+
+// @z-index
+body{
+  --LOADING-PAGE-Z-INDEX: 500;
 }
 </style>

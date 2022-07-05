@@ -1,5 +1,6 @@
 <template>
   <div class="role-hexagon-page">
+<!--    <div @click="initRoleHexagon">replay</div>-->
     <div id="role-hexagon-box-top" class="role-hexagon-box-top">
 <!--            <div class="hexagon"></div>-->
 <!--            <div class="hexagon"></div>-->
@@ -58,12 +59,19 @@ export default {
         const roleHexagonWidth = `width: var(--HEXAGON-WIDTH);`
         const roleHexagonHeight = `height: var(--HEXAGON-HEIGHT);`
         const roleHexagonClipPath = `clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);`
-        const roleHexagonBgColor = `background-color: var(--hexagon-gray);`
+        const roleHexagonBgColor = `background-color: var(--hexagon-gray);`  // 不透明度最低值 0.01 可以避免图形完全透明导致重绘
+        const roleHexagonOpacity = `opacity: 0.01;` // 不透明度最低值 0.01 可以避免图形完全透明导致重绘
+        const roleHexagonDropFilter = '-webkit-backdrop-filter: blur(10px); backdrop-filter: blur(20px);'  // 向后方元素应用的 filter
 
-        const roleHexagonOpacity = `opacity: 0.01`  // 不透明度最低值 0.01 可以避免图形完全透明导致重绘  
 
         // 设置六边形样式 set style
-        roleHexagon.setAttribute('style', `${roleHexagonFloat} ${roleHexagonMarginRight} ${roleHexagonWidth} ${roleHexagonHeight} ${roleHexagonClipPath} ${roleHexagonBgColor} ${roleHexagonOpacity}`)
+        roleHexagon.setAttribute('style', `${roleHexagonFloat} ${roleHexagonMarginRight} ${roleHexagonWidth} ${roleHexagonHeight} ${roleHexagonClipPath} ${roleHexagonBgColor} ${roleHexagonOpacity} ${roleHexagonDropFilter}`)
+        // 给六边形设置一个键
+        roleHexagon.setAttribute('hexagonKey', hexagonId)
+
+        // 鼠标移入移出动画
+        roleHexagon.addEventListener('mouseenter', this.roleMouseEnter)
+        roleHexagon.addEventListener('mouseleave', this.roleMouseLeave)
 
         if(line !== undefined && line !== null) {
           if (line === 1) {
@@ -99,9 +107,11 @@ export default {
         hexagonDom.animate(
           [
             {
+              backgroundColor: 'var(--hexagon-gray-transparent)',
               opacity: 0.01
             },
             {
+              backgroundColor: 'var(--hexagon-gray)',
               opacity: 0.99
             }
           ],
@@ -134,8 +144,6 @@ export default {
     },
     drawRoles() {
       // 生成角色
-
-
       const hexagonBoxTop = document.getElementById('role-hexagon-box-top')
       const hexagonBoxBottom = document.getElementById('role-hexagon-box-bottom')
 
@@ -153,7 +161,6 @@ export default {
 
     },
     drawRole(dom, role, realIndex) {
-      console.log('dddddddddddddddddddddd', [dom, role, realIndex])
       if(dom !== null && dom !== undefined) {
 
         // 创建角色图片背景
@@ -168,6 +175,8 @@ export default {
         const roleImageBoxLeft = `calc(( var(--HEXAGON-MARGIN-RIGHT) + var(--HEXAGON-WIDTH) ) * ${Math.floor(realIndex / 2)})`  // index 除 2 后向下取整，再乘以六边形宽度，得出偏置宽度
         const roleImageBoxPosition = `position: absolute; bottom: 0px; left: ${roleImageBoxLeft};`
         const roleImageBoxClip = 'clip-path: polygon(0% 0%, 100% 0%, 100% 90%, 50% 100%, 0% 90%);'
+        const roleImageBoxPointerEvent = 'pointer-events:none;'
+        const roleImageBoxOpacity = `opacity: 0.01;` // 不透明度最低值 0.01 可以避免图形完全透明导致重绘
         const roleImageBoxBackgroundImage = `background-image: url(${role.roleImg}); background-repeat: no-repeat;`
         let roleImageBoxBackgroundImageSize = 'background-size: 300%;'
         if (role.imgSize !== '' && role.imgSize !== null && role.imgSize !== undefined) {
@@ -181,12 +190,105 @@ export default {
         if (role.imgFilter !== '' && role.imgFilter !== null && role.imgFilter !== undefined) {
           roleImageBoxBackgroundImageFilter = `filter: grayscale(${role.imgFilter});`
         }
-        roleImageBox.setAttribute('style', `${roleImageBoxSize} ${roleImageBoxPosition} ${roleImageBoxClip} ${roleImageBoxBackgroundImage} ${roleImageBoxBackgroundImageSize} ${roleImageBoxBackgroundImagePosition} ${roleImageBoxBackgroundImageFilter}`)
+        roleImageBox.setAttribute('style', `${roleImageBoxSize} ${roleImageBoxPosition} ${roleImageBoxClip} ${roleImageBoxPointerEvent} ${roleImageBoxOpacity} ${roleImageBoxBackgroundImage} ${roleImageBoxBackgroundImageSize} ${roleImageBoxBackgroundImagePosition} ${roleImageBoxBackgroundImageFilter}`)
 
         dom.appendChild(roleImageBox)
+
+
+
+        const animationDelay = realIndex * 50
+        this.roleImageAppearAnimation(roleImageBox, animationDelay)
+      }
+    },
+    roleImageAppearAnimation(roleDom, delay) {
+      console.log('ddddddddddddd', roleDom, delay)
+
+      roleDom.animate(
+          [
+            {
+              opacity: 0.01
+            },
+            {
+              opacity: 0.99
+            }
+          ],
+          {
+            delay: delay + 300,
+            duration: 200,
+            direction: 'normal',
+            // easing: 'ease-in-out',
+            fill: 'forwards',
+          }
+      )
+    },
+    roleMouseEnter(event) {
+
+      const roleIndex = event.target.getAttribute('hexagonKey')
+      if (roleIndex !== '' && roleIndex !== 0 && roleIndex !== null && roleIndex !== undefined) {
+        const hexagonId = `role-hexagon-${roleIndex}`
+        const roleImageId = `role-image-${roleIndex}`
+        const hexagonDom = document.getElementById(hexagonId)
+        const roleImageDom = document.getElementById(roleImageId)
+        if (hexagonDom !== null && hexagonDom !== undefined && roleImageDom !== null && roleImageDom !== undefined) {
+          hexagonDom.animate(
+              [
+                {
+                  backgroundColor: 'var(--hexagon-gray)',
+                },
+                {
+                  backgroundColor: 'var(--hexagon-gray-opaque)',
+                }
+              ],
+              {
+                duration: 350,
+                direction: 'normal',
+                easing: 'ease-in-out',
+                fill: 'forwards',
+              }
+          )
+        }
+      }
+    },
+    roleMouseLeave(event) {
+
+      const roleIndex = event.target.getAttribute('hexagonKey')
+      if (roleIndex !== '' && roleIndex !== 0 && roleIndex !== null && roleIndex !== undefined) {
+        const hexagonId = `role-hexagon-${roleIndex}`
+        const roleImageId = `role-image-${roleIndex}`
+        const hexagonDom = document.getElementById(hexagonId)
+        const roleImageDom = document.getElementById(roleImageId)
+        if (hexagonDom !== null && hexagonDom !== undefined && roleImageDom !== null && roleImageDom !== undefined) {
+          hexagonDom.animate(
+              [
+                {
+                  backgroundColor: 'var(--hexagon-gray-opaque)',
+                },
+                {
+                  backgroundColor: 'var(--hexagon-gray)',
+                }
+              ],
+              {
+                duration: 280,
+                direction: 'normal',
+                easing: 'ease-in-out',
+                fill: 'forwards',
+              }
+          )
+        }
       }
     },
     initRoleHexagon() {
+
+      const hexagonBoxTop = document.getElementById('role-hexagon-box-top')
+      const hexagonBoxBottom = document.getElementById('role-hexagon-box-bottom')
+
+      // 判断父级存在
+      if (hexagonBoxTop !== undefined && hexagonBoxTop !== null && hexagonBoxBottom !== undefined && hexagonBoxBottom !== null) {
+
+        // 清空
+        hexagonBoxTop.innerHTML = ''
+        hexagonBoxBottom.innerHTML = ''
+      }
       // this.roleInfos.length + 40  比总角色数还要长40
       for (let i = 0; i<this.roleInfos.length + 40; i++) {
         if (i % 2 === 1) {
@@ -261,7 +363,7 @@ export default {
     /*clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);  !* hexagon *!*/
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);  /* hexagon */
 
-    background-color: var(--hexagon-gray);
+    background-color: var(--hexagon-gray-opaque);
   }
 
 </style>

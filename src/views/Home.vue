@@ -1,21 +1,29 @@
 <template>
   <div class="main-back-ground">
-    <back-ground-flex-triangle/>
-    <role-hexagon/>
-    <div style="position: absolute; left: 20px; bottom: 25px; font-size: 20px; color: grey;">这个网页正在制作中，敬请期待...</div>
-    <div style="position: absolute; left: 20px; bottom: 10px; font-size: 14px; color: grey;">当前为预览内容，不代表最终成品; 可能存在性能问题及漏洞，反馈：2567240058@qq.com</div>
+    <loading-page :init-role-hexagon="initRoleHexagon"/>
+    <back-ground-flex-triangle />
+    <role-hexagon ref="roleHexagon"/>
+    <div style="position: absolute; left: 20px; bottom: 29px; font-size: 20px; color: grey;">这个网页仍在建设中，敬请期待...</div>
+    <div style="position: absolute; left: 20px; bottom: 10px; font-size: 14px; color: grey;">当前为预览版，不代表最终品质； 预览版可能存在性能问题及程序漏洞，请注意您的隐私； 如需反馈请至：2567240058@qq.com</div>
   </div>
 </template>
 
 <script>
 import backGroundFlexTriangle from "@/components/backGroundFloatTriangle/BackGroundFloatTriangle";
 import roleHexagon from "@/components/roleHexagon/RoleHexagon";
+import loadingPage from "@/views/LoadingPage";
+
 export default {
   name: 'Home',
   components: {
     backGroundFlexTriangle,
-    roleHexagon
-
+    roleHexagon,
+    loadingPage
+  },
+  methods: {
+    initRoleHexagon() {
+      this.$refs.roleHexagon.initRoleHexagon()
+    }
   }
 }
 </script>
