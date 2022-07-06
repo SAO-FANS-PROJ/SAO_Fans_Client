@@ -23,7 +23,7 @@
       <div>SAO@root ~&gt; <span style="color: #d30000">设备异常，请使用桌面设备访问</span></div>
     </div>
   </div>
-  <div class="turn-your-phone-180" v-if="isPhone && is90Degree">将手机屏幕横置后刷新本页面以提升使用体验<br>如非必要请使用桌面设备访问本站.</div>
+  <div class="turn-your-phone-180" v-if="is90Degree">将手机屏幕横置后刷新本页面以提升使用体验<br>如非必要请使用桌面设备访问本站.</div>
 </template>
 
 <script>
