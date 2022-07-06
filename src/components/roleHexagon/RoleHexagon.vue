@@ -19,22 +19,24 @@ export default {
   name: "RoleHexagon",
   data: () => {
     return {
-      roleInfos: [{
-        roleId: 0,
-        roleName: 'Asuna',
-        roleImg: 'https://s1.ax1x.com/2022/07/05/jtdxA0.md.png',
-        imgSize: '190%',
-        imgPosition: '50% -240%',
-        imgFilter: '37%'
-      },{
-        roleId: 1,
-        roleName: 'Kirito',
-        roleImg: 'https://s3.bmp.ovh/imgs/2022/07/05/4ca6bba90fae3899.png',
-        imgSize: '165%',
-        imgPosition: '95% 115%',
-        imgFilter: '35%'
-      },
-      ]
+      roleInfos: [
+          {
+            roleId: 0,
+            roleName: 'Asuna',
+            roleImg: 'https://s1.ax1x.com/2022/07/05/jtdxA0.md.png',
+            imgSize: '190%',
+            imgPosition: '50% -240%',
+            imgFilter: '37%'
+          },{
+            roleId: 1,
+            roleName: 'Kirito',
+            roleImg: 'https://s3.bmp.ovh/imgs/2022/07/05/4ca6bba90fae3899.png',
+            imgSize: '165%',
+            imgPosition: '95% 115%',
+            imgFilter: '35%'
+          },
+      ],
+
     }
   },
   methods: {
@@ -61,7 +63,7 @@ export default {
         const roleHexagonClipPath = `clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);`
         const roleHexagonBgColor = `background-color: var(--hexagon-gray);`  // 不透明度最低值 0.01 可以避免图形完全透明导致重绘
         const roleHexagonOpacity = `opacity: 0.01;` // 不透明度最低值 0.01 可以避免图形完全透明导致重绘
-        const roleHexagonDropFilter = '-webkit-backdrop-filter: blur(10px); backdrop-filter: blur(20px);'  // 向后方元素应用的 filter
+        const roleHexagonDropFilter = '-webkit-backdrop-filter: blur(15px); backdrop-filter: blur(15px);'  // 向后方元素应用的 filter
 
 
         // 设置六边形样式 set style
@@ -201,7 +203,6 @@ export default {
       }
     },
     roleImageAppearAnimation(roleDom, delay) {
-      console.log('ddddddddddddd', roleDom, delay)
 
       roleDom.animate(
           [
@@ -246,6 +247,27 @@ export default {
                 fill: 'forwards',
               }
           )
+
+          const roleImageDomFilter = roleImageDom.style.filter
+          if (roleImageDomFilter !== '' && roleImageDomFilter !== null && roleImageDomFilter !== undefined) {
+            roleImageDom.setAttribute('active-role-filter-value', roleImageDomFilter)
+            roleImageDom.animate(
+                [
+                  {
+                    filter: roleImageDomFilter,
+                  },
+                  {
+                    filter: `grayscale(0%)`,
+                  }
+                ],
+                {
+                  duration: 230,
+                  direction: 'normal',
+                  easing: 'ease-in-out',
+                  fill: 'forwards',
+                }
+            )
+          }
         }
       }
     },
@@ -274,6 +296,26 @@ export default {
                 fill: 'forwards',
               }
           )
+
+          const activeRoleImageFilterValue = roleImageDom.getAttribute('active-role-filter-value')
+          if (activeRoleImageFilterValue !== '' && activeRoleImageFilterValue !== null && activeRoleImageFilterValue !== undefined) {
+            roleImageDom.animate(
+                [
+                  {
+                    filter: 'grayscale(0%)',
+                  },
+                  {
+                    filter: activeRoleImageFilterValue,
+                  }
+                ],
+                {
+                  duration: 180,
+                  direction: 'normal',
+                  easing: 'ease-in-out',
+                  fill: 'forwards',
+                }
+            )
+          }
         }
       }
     },
