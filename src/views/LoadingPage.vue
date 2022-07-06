@@ -1,14 +1,24 @@
 <template>
   <div id="loading-page-box" class="loading-page" @click="hiddenLoadingPage">
-    <div class="loading-text-box">
+    <div class="loading-text-box" v-if="!isPhone">
       <div class="loading-text-title" v-if="!isPhone">这虽然是游戏，但可不是闹着玩的。</div>
-      <div class="loading-text-title" v-if="isPhone">这虽然是游戏，<br>但可不是闹着玩的。</div>
+      <div class="loading-text-title" v-if="isPhone">
+        <div>这虽然是游戏，</div>
+        <div>但可不是闹着玩的。</div>
+      </div>
+      <div class="loading-text-title-author">——《刀剑神域》</div>
+    </div>
+    <div class="loading-text-box-phone" v-if="isPhone">
+      <div class="loading-text-title" v-if="isPhone">
+        <div style="float: left">这虽然是游戏，</div>
+        <div style="float: right">但可不是闹着玩的。</div>
+      </div>
       <div class="loading-text-title-author">——《刀剑神域》</div>
     </div>
     <div id="loading-page-loading-box" class="loading-page-loading" v-if="onLoading && !isPhone">加载中...</div>
     <div class="loading-page-loading" v-if="!onLoading && !isPhone">点击进入</div>
     <div class="loading-page-is-phone" v-if="isPhone">
-      <div>███@user ~&gt; 正在载入系统 /</div>
+      <div>SAO@user ~&gt; 正在载入系统 /</div>
       <div>SAO@root ~&gt; ...</div>
       <div>SAO@root ~&gt; <span style="color: #d30000">设备异常，请使用 PC 设备访问</span></div>
     </div>
@@ -126,6 +136,18 @@ export default {
   margin-top: 20vh;
 
   width: 600px;
+  height: 100px;
+
+  /*background-color: #42b98366;*/
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.loading-text-box-phone {
+  margin-top: 20vh;
+
+  width: 90vw;
   height: 100px;
 
   /*background-color: #42b98366;*/
