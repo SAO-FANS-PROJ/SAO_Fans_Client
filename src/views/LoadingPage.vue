@@ -4,8 +4,8 @@
       <div class="loading-text-title">这虽然是游戏，但可不是闹着玩的。</div>
       <div class="loading-text-title-author">——《刀剑神域》</div>
     </div>
-    <div id="loading-page-loading-box" class="loading-page-loading" v-if="onLoading">加载中...</div>
-    <div class="loading-page-loading" v-if="!onLoading">点击进入</div>
+    <div id="loading-page-loading-box" class="loading-page-loading" v-if="onLoading && !isPhone">加载中...</div>
+    <div class="loading-page-loading" v-if="!onLoading && !isPhone">点击进入</div>
   </div>
 </template>
 
@@ -17,7 +17,8 @@ export default {
   },
   data: () => {
     return {
-      onLoading: true
+      onLoading: true,
+      isPhone: true
     }
   },
   methods: {
@@ -25,7 +26,7 @@ export default {
       this.onLoading = false
     },
     hiddenLoadingPage() {
-      if (this.onLoading !== true) {
+      if (this.onLoading !== true && this.isPhone !== true ) {
         document.getElementById('loading-page-box').style.display = 'none'
         window.removeEventListener('load', this.setNotLoading)
         this.initRoleHexagon()
@@ -77,11 +78,21 @@ export default {
     },
     checkLoading() {
       window.addEventListener('load', this.setNotLoading)
-    }
+    },
+    checkPhone(){
+      const navigatorPhoneCheck = /Mobi|Android|iPhone/i.test(navigator.userAgent)
+      if (navigatorPhoneCheck) {
+        this.isPhone = true
+      } else {
+        this.isPhone = false
+      }
+
+    },
 
   },
   mounted() {
     this.checkLoading()
+    this.checkPhone()
   }
 }
 </script>
