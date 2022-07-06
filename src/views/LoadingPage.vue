@@ -18,7 +18,7 @@
     <div id="loading-page-loading-box" class="loading-page-loading" v-if="onLoading && !isPhone">加载中...</div>
     <div class="loading-page-loading" v-if="!onLoading && !isPhone">点击进入</div>
     <div class="loading-page-is-phone" v-if="isPhone">
-      <div>SAO@user ~&gt; 正在载入系统 /</div>
+      <div>SAO@root ~&gt; 正在载入系统 /</div>
       <div>SAO@root ~&gt; ...</div>
       <div>SAO@root ~&gt; <span style="color: #d30000">设备异常，请使用 PC 设备访问</span></div>
     </div>
