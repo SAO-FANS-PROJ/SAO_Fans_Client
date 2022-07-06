@@ -20,13 +20,16 @@
     <div class="loading-page-is-phone" v-if="isPhone">
       <div>SAO@root ~&gt; 正在载入系统 /</div>
       <div>SAO@root ~&gt; ...</div>
-      <div>SAO@root ~&gt; <span style="color: #d30000">设备异常，请使用 PC 设备访问</span></div>
+      <div>SAO@root ~&gt; <span style="color: #d30000">设备异常，请使用桌面设备访问</span></div>
     </div>
   </div>
+  <div class="turn-your-phone-180" v-if="isPhone && is90Degree">将手机屏幕横置后刷新本页面以提升使用体验<br>如非必要请使用桌面设备访问本站.</div>
 </template>
 
 <script>
-import isPhone from '../common/API/checkPhoneOrPc'
+import isPhone from '@/common/API/checkPhoneOrPc'
+import {is90Degree} from '@/common/API/check90Or180Degree'
+
 export default {
   name: "LoadingPage",
   props: {
@@ -35,7 +38,8 @@ export default {
   data: () => {
     return {
       onLoading: true,
-      isPhone: true
+      isPhone: true,
+      is90Degree: true
     }
   },
   methods: {
@@ -48,68 +52,67 @@ export default {
         window.removeEventListener('load', this.setNotLoading)
         this.initRoleHexagon()
       } else {
-        document.getElementById('loading-page-loading-box').animate(
-            [
+        const loadingText = document.getElementById('loading-page-loading-box')
+        if (loadingText !== undefined && loadingText !== null) {
+          loadingText.animate(
+              [
+                {
+                  color: '#FF0000FF',
+                  transform: `translate(5px, 8px)`
+                },
+                {
+                  color: '#000000FF',
+                  transform: `translate(-6px, -2px)`
+                },
+                {
+                  color: '#FF0000FF',
+                  transform: `translate(5px, 5px)`
+                },
+                {
+                  color: '#000000FF',
+                  transform: `translate(-4px, -6px)`
+                },
+                {
+                  color: '#FF0000FF',
+                  transform: `translate(2px, -3px)`
+                },
+                {
+                  color: '#000000FF',
+                  transform: `translate(-5px, 3px)`
+                },
+                {
+                  color: '#FF0000FF',
+                  transform: `translate(2px, 5px)`
+                },
+                {
+                  color: '#000000FF',
+                  transform: `translate(0px, 0px)`
+                },
+              ],
               {
-                color: '#FF0000FF',
-                transform: `translate(5px, 8px)`
-              },
-              {
-                color: '#000000FF',
-                transform: `translate(-6px, -2px)`
-              },
-              {
-                color: '#FF0000FF',
-                transform: `translate(5px, 5px)`
-              },
-              {
-                color: '#000000FF',
-                transform: `translate(-4px, -6px)`
-              },
-              {
-                color: '#FF0000FF',
-                transform: `translate(2px, -3px)`
-              },
-              {
-                color: '#000000FF',
-                transform: `translate(-5px, 3px)`
-              },
-              {
-                color: '#FF0000FF',
-                transform: `translate(2px, 5px)`
-              },
-              {
-                color: '#000000FF',
-                transform: `translate(0px, 0px)`
-              },
-          ],
-          {
-            duration: 800,
-            direction: 'normal',
-            easing: 'ease-in-out',
-            fill: 'forwards',
-          }
-        )
+                duration: 800,
+                direction: 'normal',
+                easing: 'ease-in-out',
+                fill: 'forwards',
+              }
+          )
+        }
       }
-
     },
     checkLoading() {
       window.addEventListener('load', this.setNotLoading)
     },
     checkPhone(){
-      const navigatorPhoneCheck = isPhone()
-      if (navigatorPhoneCheck) {
-        this.isPhone = true
-      } else {
-        this.isPhone = false
-      }
-
+      this.isPhone = isPhone();
     },
-
+    checkPhoneDegree() {
+      this.is90Degree = is90Degree()
+    }
   },
   mounted() {
     this.checkLoading()
     this.checkPhone()
+    this.checkPhoneDegree()
   }
 }
 </script>
@@ -176,5 +179,16 @@ export default {
 }
 .loading-page-is-phone {
   margin-top: 40px;
+}
+.turn-your-phone-180 {
+  position: absolute;
+  top: 5px;
+  right: 8px;
+
+  text-align: right;
+
+  font-size: 1em;
+
+  color: var(--like-white);
 }
 </style>

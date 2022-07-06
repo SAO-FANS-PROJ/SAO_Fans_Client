@@ -39,7 +39,8 @@ body{
   --hexagon-gray-transparent: #65656501;
 
   // loading page part
-  --loading-page-background-color: #F7F6F4FF
+  --loading-page-background-color: #F7F6F4FF;
+  --like-white: #00000030
 }
 
 // @size
