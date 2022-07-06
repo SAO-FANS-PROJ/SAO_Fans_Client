@@ -26,14 +26,14 @@ export default {
             roleImg: 'https://s1.ax1x.com/2022/07/05/jtdxA0.md.png',
             imgSize: '190%',
             imgPosition: '50% -240%',
-            imgFilter: '37%'
+            imgFilter: '50%'
           },{
             roleId: 1,
             roleName: 'Kirito',
             roleImg: 'https://s3.bmp.ovh/imgs/2022/07/05/4ca6bba90fae3899.png',
             imgSize: '165%',
             imgPosition: '95% 115%',
-            imgFilter: '35%'
+            imgFilter: '40%'
           },
       ],
 
