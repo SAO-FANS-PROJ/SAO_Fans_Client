@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import isPhone from '../common/API/checkPhoneOrPc'
 export default {
   name: "LoadingPage",
   props: {
@@ -96,7 +97,7 @@ export default {
       window.addEventListener('load', this.setNotLoading)
     },
     checkPhone(){
-      const navigatorPhoneCheck = /Mobi|Android|iPhone/i.test(navigator.userAgent)
+      const navigatorPhoneCheck = isPhone()
       if (navigatorPhoneCheck) {
         this.isPhone = true
       } else {
