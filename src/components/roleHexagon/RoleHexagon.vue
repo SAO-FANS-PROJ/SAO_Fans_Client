@@ -234,7 +234,7 @@ export default {
           }
       )
     },
-    // 待办:  鼠标移出时，设置css使自己不再接受鼠标事件；鼠标移入时，恢复所有六边形接受鼠标事件
+    // 待办:  鼠标移出时，设置六边形的 css 使自己不再接受鼠标事件；鼠标移入时，恢复所有六边形接受鼠标事件
     roleMouseEnter(event) {
 
       const roleIndex = event.target.getAttribute('hexagonKey')

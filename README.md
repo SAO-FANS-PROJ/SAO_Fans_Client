@@ -7,6 +7,9 @@
 [demo](https://sao-fans-client.vercel.app)    
 [演示](https://sao-fans-client.vercel.app) 
 
+### 待办:
+* 鼠标移出时，设置六边形的 css 使自己不再接受鼠标事件；鼠标移入时，恢复所有六边形接受鼠标事件
+
 ## Project setup
 ```
 npm install
