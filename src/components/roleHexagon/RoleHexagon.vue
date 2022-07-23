@@ -28,15 +28,29 @@ export default {
             imgPosition: '50% -240%',
             imgFilter: '50%'
           },{
-            roleId: 1,
-            roleName: 'Kirito',
-            roleImg: 'https://s3.bmp.ovh/imgs/2022/07/05/4ca6bba90fae3899.png',
-            imgSize: '165%',
-            imgPosition: '95% 115%',
-            imgFilter: '40%'
-          },
+          roleId: 1,
+          roleName: 'Kirito',
+          roleImg: 'https://s3.bmp.ovh/imgs/2022/07/05/4ca6bba90fae3899.png',
+          imgSize: '165%',
+          imgPosition: '95% 115%',
+          imgFilter: '40%'
+        },{
+          roleId: 1,
+          roleName: 'Kirito',
+          roleImg: 'https://s3.bmp.ovh/imgs/2022/07/05/4ca6bba90fae3899.png',
+          imgSize: '165%',
+          imgPosition: '95% 115%',
+          imgFilter: '40%'
+        },{
+          roleId: 1,
+          roleName: 'Kirito',
+          roleImg: 'https://s3.bmp.ovh/imgs/2022/07/05/4ca6bba90fae3899.png',
+          imgSize: '165%',
+          imgPosition: '95% 115%',
+          imgFilter: '40%'
+        },
       ],
-
+      hexagonBoxClassName: 'role-hexagon',
     }
   },
   methods: {
@@ -47,7 +61,7 @@ export default {
       // 判断父级存在
       if (hexagonBoxTop !== undefined && hexagonBoxTop !== null && hexagonBoxBottom !== undefined && hexagonBoxBottom !== null) {
 
-        const hexagonBoxClassName = 'role-hexagon'  // 基本类名
+        const hexagonBoxClassName = this.hexagonBoxClassName  // 基本类名
         const hexagonBoxId = `${hexagonBoxClassName}-${hexagonId}`  //元素ID
 
         // 创建六边形的 div 盒子元素 create element
@@ -196,8 +210,6 @@ export default {
 
         dom.appendChild(roleImageBox)
 
-
-
         const animationDelay = realIndex * 50
         this.roleImageAppearAnimation(roleImageBox, animationDelay)
       }
@@ -222,6 +234,7 @@ export default {
           }
       )
     },
+    // 待办:  鼠标移出时，设置css使自己不再接受鼠标事件；鼠标移入时，恢复所有六边形接受鼠标事件
     roleMouseEnter(event) {
 
       const roleIndex = event.target.getAttribute('hexagonKey')
@@ -231,6 +244,9 @@ export default {
         const hexagonDom = document.getElementById(hexagonId)
         const roleImageDom = document.getElementById(roleImageId)
         if (hexagonDom !== null && hexagonDom !== undefined && roleImageDom !== null && roleImageDom !== undefined) {
+
+          hexagonDom.style.cursor = 'pointer'  // 设置鼠标进入六边形后形状变成小手
+
           hexagonDom.animate(
               [
                 {
@@ -319,6 +335,21 @@ export default {
         }
       }
     },
+    addRoleHexagonClickEvent() {
+      const rolesCount = this.roleInfos.length
+      for (let hexagonId = 1; hexagonId <= rolesCount; hexagonId++) {  // 因为角色是从第二个六边形上开始绘制的，所以索引要从 1 开始 （左下露出一半的为 0 号六边形，左上为 1 号六边形，依此类推）
+        const hexagonBoxClassName = this.hexagonBoxClassName  // 基本类名
+        const hexagonBoxId = `${hexagonBoxClassName}-${hexagonId}`  //元素ID
+        const hexagonDomWhoHaveRole = document.getElementById(hexagonBoxId)
+        if (hexagonDomWhoHaveRole !== null && hexagonDomWhoHaveRole !== undefined) {
+          hexagonDomWhoHaveRole.addEventListener('click', this.RoleHexagonClickEvent)
+        }
+      }
+    },
+    RoleHexagonClickEvent(event) {
+      const roleIndex = event.target.getAttribute('hexagonKey')
+      this.$store.commit('updateActiveRole', roleIndex)
+    },
     initRoleHexagon() {
 
       const hexagonBoxTop = document.getElementById('role-hexagon-box-top')
@@ -342,6 +373,8 @@ export default {
       this.hexagonsAppearAnimation()
 
       this.drawRoles()
+
+      this.addRoleHexagonClickEvent()
     }
   },
   mounted() {

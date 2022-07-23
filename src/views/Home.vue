@@ -4,9 +4,12 @@
     <back-ground-flex-triangle />
     <role-hexagon ref="roleHexagon"/>
     <div style="position: absolute; left: 20px; bottom: 10px; font-size: 14px; color: grey;" v-if="showText">
+      <span v-if="this.activeRoleIndex !== ''">debug: {{this.activeRoleIndex}}</span>
+      <br>
       <span style="font-size: 20px">这个网站仍在建设中，敬请期待...</span>
       <br>
-      当前为预览版，不代表最终品质； 预览版可能存在性能问题及程序漏洞，请注意您的隐私； 如需反馈请至：2567240058@qq.com</div>
+      当前为预览版，不代表最终品质； 预览版可能存在性能问题及程序漏洞，请注意您的隐私； 如需反馈请至：2567240058@qq.com
+    </div>
   </div>
 </template>
 
@@ -30,6 +33,9 @@ export default {
     backGroundFlexTriangle,
     roleHexagon,
     loadingPage
+  },
+  computed: {
+    activeRoleIndex() {return this.$store.state.activeRole}
   },
   methods: {
     initRoleHexagon() {
