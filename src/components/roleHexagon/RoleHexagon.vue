@@ -35,14 +35,14 @@ export default {
           imgPosition: '95% 115%',
           imgFilter: '40%'
         },{
-          roleId: 1,
+          roleId: 2,
           roleName: 'Kirito',
           roleImg: 'https://s3.bmp.ovh/imgs/2022/07/05/4ca6bba90fae3899.png',
           imgSize: '165%',
           imgPosition: '95% 115%',
           imgFilter: '40%'
         },{
-          roleId: 1,
+          roleId: 3,
           roleName: 'Kirito',
           roleImg: 'https://s3.bmp.ovh/imgs/2022/07/05/4ca6bba90fae3899.png',
           imgSize: '165%',
@@ -235,7 +235,6 @@ export default {
           }
       )
     },
-    // 待办:  鼠标移出时，设置六边形的 css 使自己不再接受鼠标事件；鼠标移入时，恢复所有六边形接受鼠标事件
     roleMouseEnter(event) {
 
       const roleIndex = event.target.getAttribute('hexagonKey')
