@@ -78,7 +78,7 @@ export default {
         const roleHexagonBgColor = `background-color: var(--hexagon-gray);`  // 不透明度最低值 0.01 可以避免图形完全透明导致重绘
         const roleHexagonOpacity = `opacity: 0.01;` // 不透明度最低值 0.01 可以避免图形完全透明导致重绘
         const roleHexagonDropFilter = '-webkit-backdrop-filter: blur(15px); backdrop-filter: blur(15px);'  // 向后方元素应用的 filter
-        const roleHexagonActivePointEvent = 'pointer-events: auto;' // 六边形响应鼠标事件
+        const roleHexagonActivePointEvent = 'pointer-events: auto;' // 因为装六边形的盒子不响应鼠标事件了，所以这里显式声明六边形响应鼠标事件，使其实现隔代响应
 
 
         // 设置六边形样式 set style
