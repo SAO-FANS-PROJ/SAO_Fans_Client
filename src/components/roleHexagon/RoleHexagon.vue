@@ -78,10 +78,11 @@ export default {
         const roleHexagonBgColor = `background-color: var(--hexagon-gray);`  // 不透明度最低值 0.01 可以避免图形完全透明导致重绘
         const roleHexagonOpacity = `opacity: 0.01;` // 不透明度最低值 0.01 可以避免图形完全透明导致重绘
         const roleHexagonDropFilter = '-webkit-backdrop-filter: blur(15px); backdrop-filter: blur(15px);'  // 向后方元素应用的 filter
+        const roleHexagonActivePointEvent = 'pointer-events: auto;' // 六边形响应鼠标事件
 
 
         // 设置六边形样式 set style
-        roleHexagon.setAttribute('style', `${roleHexagonFloat} ${roleHexagonMarginRight} ${roleHexagonWidth} ${roleHexagonHeight} ${roleHexagonClipPath} ${roleHexagonBgColor} ${roleHexagonOpacity} ${roleHexagonDropFilter}`)
+        roleHexagon.setAttribute('style', `${roleHexagonFloat} ${roleHexagonMarginRight} ${roleHexagonWidth} ${roleHexagonHeight} ${roleHexagonClipPath} ${roleHexagonBgColor} ${roleHexagonOpacity} ${roleHexagonDropFilter} ${roleHexagonActivePointEvent}`)
         // 给六边形设置一个键
         roleHexagon.setAttribute('hexagonKey', hexagonId)
 
@@ -407,6 +408,9 @@ export default {
     width: var(--REALLY-LONG);
     height: var(--HEXAGON-BOX-HEIGHT);
 
+    /* 阻止六边形盒子的鼠标事件，但是六边形本身显示声明了不阻止鼠标事件响应，因此实现了隔代响应；即鼠标移动到六边形上时是有反应的，但装六边形的父级(装六边形的盒子)并不会遮挡响应 */
+    pointer-events: none;
+
     /*background-color: #42b98388;*/
 
     /*overflow: hidden;*/
@@ -421,6 +425,9 @@ export default {
 
     width: var(--REALLY-LONG);
     height: var(--HEXAGON-BOX-HEIGHT);
+
+    /* 阻止六边形盒子的鼠标事件，但是六边形本身显示声明了不阻止鼠标事件响应，因此实现了隔代响应；即鼠标移动到六边形上时是有反应的，但装六边形的父级(装六边形的盒子)并不会遮挡响应 */
+    pointer-events: none;
 
     /*background-color: #4642B987;*/
 
