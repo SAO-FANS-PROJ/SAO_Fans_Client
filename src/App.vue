@@ -75,5 +75,9 @@ body{
 // @z-index
 body{
   --LOADING-PAGE-Z-INDEX: 500;
+
+  --ROlE-IMAGE-Z-INDEX: 400;  // 角色图片在未点击时的 z-index
+  --ROlE-MASK-Z-INDEX: 410;  // 角色详情遮罩的 z-index
+  --ROLE-DISPLAY-Z-INDEX: 420;  // 角色图片在展开后的 z-index
 }
 </style>
