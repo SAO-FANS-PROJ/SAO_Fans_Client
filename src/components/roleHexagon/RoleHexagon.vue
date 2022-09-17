@@ -21,37 +21,20 @@ export default {
   data: () => {
     return {
       roleInfos: [
-          {
-            roleId: 1,
-            roleName: 'Asuna',
-            roleImg: 'https://s1.ax1x.com/2022/07/05/jtdxA0.md.png',
-            imgSize: '190%',
-            imgPosition: '50% -240%',
-            imgFilter: '50%',
-          },{
+        {
+          roleId: 1,
+          roleName: 'Asuna',
+          roleImg: 'https://s1.ax1x.com/2022/07/05/jtdxA0.md.png',
+          imgSize: '190%',
+          imgPosition: '50% -240%',
+          imgFilter: '50%',
+        },{
           roleId: 2,
           roleName: 'Kirito',
           roleImg: 'https://s3.bmp.ovh/imgs/2022/07/05/4ca6bba90fae3899.png',
           imgSize: '165%',
           imgPosition: '95% 115%',
           imgFilter: '40%',
-          detailDisplay: {
-            // backgroundColor: 'var(--hexagon-gray-opaque)',
-            backgroundColor: 'red',
-            position: {
-              top: 'calc(((30vh + 40vw) / 2) - 10vw )',
-              right: 'calc((3vh + 5vw) / 2)',
-            },
-            size: {
-              width: '45vw',
-              height: 'calc((45vw / 3) + 20vh)'
-            },
-            // clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)'
-            clipPath: 'polygon(0% 100%, 100% 0%, 100% 80%, 100% 80%, 0% 100%, 0% 100%)'
-          },
-          detailImageDisplay: {
-            clipPath: 'polygon(0% 0%, 100% 0%, 100% 90%, 0% 100%, 0% 100%)'
-          },
         },{
           roleId: 3,
           roleName: 'Kirito',
@@ -66,6 +49,32 @@ export default {
           imgSize: '165%',
           imgPosition: '95% 115%',
           imgFilter: '40%',
+          detailDisplay: {
+            animationTime: 600,
+            easing: 'cubic-bezier(.69,.11,.25,.95)',
+            hexagon: {
+              height: `calc((40vh + 40vw) / 2)`,
+              width: `calc((40vh + 40vw) / 1.5)`,
+              left: `50vw`,
+              top: `20vh`,
+              backgroundColor: 'white',
+              innerBoxShadow: '0 0 350px #0467FF54 inset',
+              clipPath: 'polygon(100% 60%, 100% 60%, 100% 60%, 10% 100%, 0% 70%, 0% 70%)',
+            },
+            image: {
+              height: `calc(((40vh + 40vw) / 2.5) * 2.5)`,   // 高等于宽*2.5 与角色图片没点击时是相同比例
+              width: `calc((40vh + 40vw) / 2.5)`,
+              left: `50vw`,
+              top: `calc(20vh - calc((((40vh + 40vw) / 2.5) * 2.5) - ((40vh + 40vw) / 2)))`,    // 如果要保持背景和图片的下边一致 top = 背景的top - (图片的高度 - 背景的高度)
+              backgroundSize: `100%`,
+              backgroundPosition: '95% 95%',
+              sizeAnimationProportion: 1, // 角色图片的缩放动画比位置变化动画快多少倍
+              clipPath: 'polygon(0% 0%, 100% 0%, calc((40vh + 40vw) / 1.5) calc((((40vh + 40vw) / 2.5) * 2.5) - (((40vh + 40vw) / 2) * 0.4)), calc(((40vh + 40vw) / 1.5) * 0.1) 100%, calc(((40vh + 40vw) / 1.5) * 0.1) 100%)',
+
+              // polygon(0% 0%, 100% 0%, 100% calc((((40vh + 40vw) / 2) * 0.4) * ((((40vh + 40vw) / 2.5) - (((40vh + 40vw) / 1.5) * 0.1)) / (((40vh + 40vw) / 1.5) * 0.9))), calc(((40vh + 40vw) / 1.5) * 0.1) 100%, 0% calc(((40vh + 40vw) / 2) * 0.3))
+
+            }
+          },
         },
       ],
       hexagonBoxClassName: 'role-hexagon',
@@ -74,6 +83,7 @@ export default {
       roleHexagonExpandableClassName: 'role-hexagon-expandable',
       animateHexagonBoxClassName: 'animate-role-hexagon',
       animateDisplayShapeBoxClassName: 'animate-role-display-shape',
+      roleMaskClassName: 'role-mask',
     }
   },
   computed: {
@@ -419,15 +429,15 @@ export default {
       // 判断父级存在
       if (hexagonBoxTop !== undefined && hexagonBoxTop !== null && hexagonBoxBottom !== undefined && hexagonBoxBottom !== null) {
         if (roleIndex % 2 === 0) { // 如果是偶数
-          this.expandableRole(hexagonBoxBottom, roleIndex)
+          this.expandableRole(hexagonBoxBottom, 'bottom', roleIndex)
         } else {
-          this.expandableRole(hexagonBoxTop, roleIndex)
+          this.expandableRole(hexagonBoxTop, 'top', roleIndex)
         }
       }
 
 
     },
-    expandableRole(dom, roleIndex) {
+    expandableRole(dom, domPosition, roleIndex) {
 
       // 这个地方需要换一下思路了
       // 首先获取到 角色图片 和 背景六边形 的 dom (以下简称 I 和 H)
@@ -443,111 +453,217 @@ export default {
       // 与上一步同时动画遮罩的淡入
 
 
+      // console.log('role index: ', roleIndex)
+      if( roleIndex!==null
+          && this.roleInfos[roleIndex-1].detailDisplay !== undefined
+          && this.roleInfos[roleIndex-1].detailDisplay.hexagon !== undefined
+          && this.roleInfos[roleIndex-1].detailDisplay.image !== undefined
+          && this.roleInfos[roleIndex-1].detailDisplay.animationTime !== undefined && this.roleInfos[roleIndex-1].detailDisplay.animationTime !== null
+          && this.roleInfos[roleIndex-1].detailDisplay.easing !== undefined
+        ){
 
-      const roleHexagonDom = document.getElementById(`${this.hexagonBoxClassName}-${roleIndex}`)
-      const roleImageDom = document.getElementById(`${this.roleImageClassName}-${roleIndex}`)
+        const roleHexagonDom = document.getElementById(`${this.hexagonBoxClassName}-${roleIndex}`)
+        const roleImageDom = document.getElementById(`${this.roleImageClassName}-${roleIndex}`)
 
-      if ( roleHexagonDom !== null && roleHexagonDom !== undefined && roleImageDom !== null && roleImageDom !== undefined ) {
-        const roleHexagonClient = roleHexagonDom.getBoundingClientRect()
-        const roleImageClient = roleImageDom.getBoundingClientRect()
+        if ( roleHexagonDom !== null && roleHexagonDom !== undefined && roleImageDom !== null && roleImageDom !== undefined ) {
+          const roleHexagonClient = roleHexagonDom.getBoundingClientRect()
+          const roleImageClient = roleImageDom.getBoundingClientRect()
 
-        const roleHexagonStyle = roleHexagonDom.style
-        const roleImageStyle = roleImageDom.style
+          const roleHexagonStyle = roleHexagonDom.style
+          const roleImageStyle = roleImageDom.style
 
-        if( roleHexagonClient !== null && roleHexagonClient !== undefined && roleImageClient !== null && roleImageClient !== undefined
-            && roleHexagonStyle !== null && roleHexagonStyle !== undefined && roleImageStyle !== null && roleImageStyle !== undefined ) {
-
-
-          // console.log('roleHexagonClient', roleHexagonClient)
-          // console.log('roleImageClient', roleImageClient)
-          // console.log('roleHexagonStyle', roleHexagonStyle)
-          // console.log('roleImageStyle', roleImageStyle)
-
-
-
-          // 创建可扩展的角色图片
-          const roleImageExpandableBoxId = `${this.roleImageExpandableClassName}-${roleIndex}`
-          const roleImageExpandableClassName = this.roleImageExpandableClassName
-          const roleImageExpandableBox = document.createElement('div')
-          roleImageExpandableBox.id = roleImageExpandableBoxId
-          roleImageExpandableBox.className = roleImageExpandableClassName
-
-          // 样式
-          const roleImageExpandableBoxSize = `width: ${roleImageStyle.width}; height: ${roleImageStyle.height};`
-          const roleImageExpandableBoxPosition = `position: fixed; left: ${roleImageClient.left}px; top: ${roleImageClient.top}px;`
-          const roleImageExpandableClipPath = `clip-path: ${roleImageStyle.clipPath};`
-          const roleImageExpandableBackground = `background-image: ${roleImageStyle.backgroundImage}; background-repeat: no-repeat; background-size: ${roleImageStyle.backgroundSize}; background-position: ${roleImageStyle.backgroundPosition};`
-          const roleImageExpandableZIndex = `z-index: var(--ROLE-IMAGE-EXPANDABLE-Z-INDEX);`
-
-          roleImageExpandableBox.setAttribute('style', `${roleImageExpandableBoxSize} ${roleImageExpandableBoxPosition} ${roleImageExpandableClipPath} ${roleImageExpandableBackground} ${roleImageExpandableZIndex}`)
-          dom.appendChild(roleImageExpandableBox)
+          if( roleHexagonClient !== null && roleHexagonClient !== undefined && roleImageClient !== null && roleImageClient !== undefined
+              && roleHexagonStyle !== null && roleHexagonStyle !== undefined && roleImageStyle !== null && roleImageStyle !== undefined ) {
 
 
-          // 创建可扩展的角色六边形
-          const roleHexagonExpandableBoxId = `${this.roleHexagonExpandableClassName}-${roleIndex}`
-          const roleHexagonExpandableClassName = this.roleHexagonExpandableClassName
-          const roleHexagonExpandableBox = document.createElement('div')
-          roleHexagonExpandableBox.id = roleHexagonExpandableBoxId
-          roleHexagonExpandableBox.className = roleHexagonExpandableClassName
-
-          // 样式
-          const roleHexagonExpandableBoxSize = `width: ${roleHexagonStyle.width}; height: ${roleHexagonStyle.height};`
-          const roleHexagonExpandableBoxPosition = `position: fixed; left: ${roleHexagonClient.left}px; top: ${roleHexagonClient.top}px;`
-          const roleHexagonExpandableBoxClipPath = `clip-path: ${roleHexagonStyle.clipPath};`
-          const roleHexagonExpandableZIndex = `z-index: var(--ROLE-HEXAGON-EXPANDABLE-Z-INDEX);`
-          // const roleImageExpandableBackground = `background-image: ${roleImageStyle.backgroundImage}; background-repeat: no-repeat; background-size: ${roleImageStyle.backgroundSize}; background-position: ${roleImageStyle.backgroundPosition};`
-
-
-          roleHexagonExpandableBox.setAttribute('style', `${roleHexagonExpandableBoxSize} ${roleHexagonExpandableBoxPosition} ${roleHexagonExpandableBoxClipPath} ${roleHexagonExpandableZIndex} background-color: red;`)
-          dom.appendChild(roleHexagonExpandableBox)
-
-
-          // 隐藏原来的 dom  ( visibility: hidden; 的隐藏会让元素消失，但仍然占位 )
-          roleImageDom.style.visibility = 'hidden'
-          roleHexagonDom.style.visibility = 'hidden'
+            // console.log('roleHexagonClient', roleHexagonClient)
+            // console.log('roleImageClient', roleImageClient)
+            // console.log('roleHexagonStyle', roleHexagonStyle)
+            // console.log('roleImageStyle', roleImageStyle)
 
 
 
-          console.log('left', `${roleHexagonExpandableBox.style.left}`)
+            // 创建可扩展的角色图片
+            const roleImageExpandableBoxId = `${this.roleImageExpandableClassName}-${roleIndex}`
+            const roleImageExpandableClassName = this.roleImageExpandableClassName
+            const roleImageExpandableBox = document.createElement('div')
+            roleImageExpandableBox.id = roleImageExpandableBoxId
+            roleImageExpandableBox.className = roleImageExpandableClassName
 
-          // 设置动画
-          roleHexagonExpandableBox.animate([
-              {
-                height: `${roleHexagonExpandableBox.offsetHeight}px`,
-                width: `${roleHexagonExpandableBox.offsetWidth}px`,
-                left: `${roleHexagonExpandableBox.style.left}`,
-                top: `${roleHexagonExpandableBox.style.top}`
-              },
-              {
-                height: `calc(${roleHexagonExpandableBox.offsetHeight}px * 2)`,
-                width: `calc(${roleHexagonExpandableBox.offsetWidth}px * 2)`,
-                left: `60vw`,
-                top: `30vh`
+            // 角色图片样式
+            const roleImageExpandableBoxSize = `width: ${roleImageStyle.width}; height: ${roleImageStyle.height};`
+            const roleImageExpandableBoxPosition = `position: fixed; left: ${roleImageClient.left}px; top: ${roleImageClient.top}px;`
+            const roleImageExpandableClipPath = `clip-path: ${roleImageStyle.clipPath};`
+            const roleImageExpandableBackground = `background-image: ${roleImageStyle.backgroundImage}; background-repeat: no-repeat; background-size: ${roleImageStyle.backgroundSize}; background-position: ${roleImageStyle.backgroundPosition};`
+            const roleImageExpandableZIndex = `z-index: var(--ROLE-IMAGE-EXPANDABLE-Z-INDEX);`
+
+            roleImageExpandableBox.setAttribute('style', `${roleImageExpandableBoxSize} ${roleImageExpandableBoxPosition} ${roleImageExpandableClipPath} ${roleImageExpandableBackground} ${roleImageExpandableZIndex}`)
+            dom.appendChild(roleImageExpandableBox)
+
+
+            // 创建可扩展的角色六边形
+            const roleHexagonExpandableBoxId = `${this.roleHexagonExpandableClassName}-${roleIndex}`
+            const roleHexagonExpandableClassName = this.roleHexagonExpandableClassName
+            const roleHexagonExpandableBox = document.createElement('div')
+            roleHexagonExpandableBox.id = roleHexagonExpandableBoxId
+            roleHexagonExpandableBox.className = roleHexagonExpandableClassName
+
+            // 样式
+            const roleHexagonExpandableBoxSize = `width: ${roleHexagonStyle.width}; height: ${roleHexagonStyle.height};`
+            const roleHexagonExpandableBoxPosition = `position: fixed; left: ${roleHexagonClient.left}px; top: ${roleHexagonClient.top}px;`
+            const roleHexagonExpandableBoxClipPath = `clip-path: ${roleHexagonStyle.clipPath};`
+            const roleImageExpandableBackgroundColor = `background-color: var(--hexagon-gray-opaque);`
+            const roleHexagonExpandableZIndex = `z-index: var(--ROLE-HEXAGON-EXPANDABLE-Z-INDEX);`
+
+
+            roleHexagonExpandableBox.setAttribute('style', `${roleHexagonExpandableBoxSize} ${roleHexagonExpandableBoxPosition} ${roleHexagonExpandableBoxClipPath} ${roleImageExpandableBackgroundColor} ${roleHexagonExpandableZIndex}`)
+            dom.appendChild(roleHexagonExpandableBox)
+
+
+            // 隐藏原来的 dom  ( visibility: hidden; 的隐藏会让元素消失，但仍然占位 )
+            roleImageDom.style.visibility = 'hidden'
+            roleHexagonDom.style.visibility = 'hidden'
+
+
+
+
+            // 创建遮罩
+            const RoleDisplayMask = document.createElement('div')
+            RoleDisplayMask.className = this.roleMaskClassName
+            RoleDisplayMask.id = `${this.roleMaskClassName}-${domPosition}`
+
+            // 设置可动画的六边形盒子样式 set style*/
+            const maskStyle = 'position: fixed; top: var(--ZERO-PIXEL); left: var(--ZERO-PIXEL); background-color: var(--mask-gray); width: var(--MAX-SCREEN-WIDTH); height: var(--MAX-SCREEN-HEIGHT); pointer-events: all; z-index: var(--ROlE-MASK-Z-INDEX);'
+            RoleDisplayMask.setAttribute('style', maskStyle)
+
+            dom.appendChild(RoleDisplayMask) // 创建遮罩
+
+            // 遮罩出现的动画
+            RoleDisplayMask.animate(
+                [
+                  {
+                    opacity: 0.1
+                  },
+                  {
+                    opacity: 0.9
+                  }
+                ],
+                {
+                  duration: 500,
+                  easing: 'ease-in-out',
+                  fill: 'both'
+                }
+            )
+
+
+            // 设置背景六边形的动画
+            roleHexagonExpandableBox.animate([
+                  {
+
+                    clipPath: `${roleHexagonExpandableBox.style.clipPath}`,
+                    height: `${roleHexagonExpandableBox.offsetHeight}px`,
+                    width: `${roleHexagonExpandableBox.offsetWidth}px`,
+                    left: `${roleHexagonExpandableBox.style.left}`,
+                    top: `${roleHexagonExpandableBox.style.top}`,
+                    backgroundColor: `${roleHexagonExpandableBox.style.backgroundColor}`,
+                  },
+                  {
+                    clipPath: this.roleInfos[roleIndex-1].detailDisplay.hexagon.clipPath,
+                    height: this.roleInfos[roleIndex-1].detailDisplay.hexagon.height,
+                    width: this.roleInfos[roleIndex-1].detailDisplay.hexagon.width,
+                    left: this.roleInfos[roleIndex-1].detailDisplay.hexagon.left,
+                    top: this.roleInfos[roleIndex-1].detailDisplay.hexagon.top,
+                    backgroundColor: this.roleInfos[roleIndex-1].detailDisplay.hexagon.backgroundColor,
+                    boxShadow: this.roleInfos[roleIndex-1].detailDisplay.hexagon.innerBoxShadow,
+                  }
+                ],
+                {
+                  duration: this.roleInfos[roleIndex-1].detailDisplay.animationTime,
+                  direction: 'normal',
+                  easing: this.roleInfos[roleIndex-1].detailDisplay.easing,
+                  fill: 'forwards',
+                }
+            )
+
+            // filter: drop-shadow(0px 0px 200px red);
+            // box-shadow: 0 0 400px #0467ff54 inset;
+
+
+                    // 设置可扩展角色图片的动画 (位置)
+                    roleImageExpandableBox.animate([
+                          {
+                            height: `${roleImageExpandableBox.offsetHeight}px`,
+                            width: `${roleImageExpandableBox.offsetWidth}px`,
+                            left: `${roleImageExpandableBox.style.left}`,
+                            top: `${roleImageExpandableBox.style.top}`,
+                            clipPath: `${roleImageExpandableBox.style.clipPath}`,
+                          },
+                          {
+                            height: this.roleInfos[roleIndex-1].detailDisplay.image.height,
+                            width: this.roleInfos[roleIndex-1].detailDisplay.image.width,
+                            left: this.roleInfos[roleIndex-1].detailDisplay.image.left,
+                            top: this.roleInfos[roleIndex-1].detailDisplay.image.top,
+                            clipPath: this.roleInfos[roleIndex-1].detailDisplay.image.clipPath,
+                          }
+                        ],
+                        {
+                          duration: this.roleInfos[roleIndex-1].detailDisplay.animationTime,
+                          direction: 'normal',
+                          easing: this.roleInfos[roleIndex-1].detailDisplay.easing,
+                          fill: 'forwards',
+                        }
+                    )
+
+                    // 设置可扩展角色图片的动画 (尺寸)
+                    roleImageExpandableBox.animate([
+                          {
+                            backgroundSize: `${roleImageExpandableBox.style.backgroundSize}`,
+                            backgroundPosition: `${roleImageExpandableBox.style.backgroundPosition}`,
+                          },
+                          {
+                            backgroundSize: this.roleInfos[roleIndex-1].detailDisplay.image.backgroundSize,
+                            backgroundPosition: this.roleInfos[roleIndex-1].detailDisplay.image.backgroundPosition,
+                          }
+                        ],
+                        {
+                          duration: this.roleInfos[roleIndex-1].detailDisplay.animationTime / this.roleInfos[roleIndex-1].detailDisplay.image.sizeAnimationProportion,
+                          direction: 'normal',
+                          easing: this.roleInfos[roleIndex-1].detailDisplay.easing,
+                          fill: 'forwards',
+                        }
+                    )
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  }
+
+
+
+
+
+
+
+
+
+                }
+
+
+
               }
-            ],
-            {
-              duration: 600,
-              direction: 'normal',
-              easing: 'ease-in-out',
-              fill: 'forwards',
             }
-          )
 
 
-
-
-
-
-
-        }
-
-
-
-      }
-    }
-
-
-    /*expandRoleDetail(roleIndex) { // 在被点击的六边形的相同位置生成一个相同尺寸的绝对定位的六边形，然后使用FLIP制作动画*/
+            /*expandRoleDetail(roleIndex) { // 在被点击的六边形的相同位置生成一个相同尺寸的绝对定位的六边形，然后使用FLIP制作动画*/
 
     /*  const roleHexagonDom = document.getElementById(`${this.hexagonBoxClassName}-${roleIndex}`)*/
     /*  const roleImageDom = document.getElementById(`${this.hexagonBoxClassName}-${roleIndex}`)*/

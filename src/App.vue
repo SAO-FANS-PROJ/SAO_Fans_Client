@@ -22,6 +22,8 @@ body{
 // @color
 body{
   --white: white;
+  --darkness: #010A1AFF;
+  --mask-gray: #4C4C4CFF;
 
   --main-background-color: #EEEEEEFF;
 
