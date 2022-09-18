@@ -35,20 +35,6 @@ export default {
           imgSize: '165%',
           imgPosition: '95% 115%',
           imgFilter: '40%',
-        },{
-          roleId: 3,
-          roleName: 'Kirito',
-          roleImg: 'https://s3.bmp.ovh/imgs/2022/07/05/4ca6bba90fae3899.png',
-          imgSize: '165%',
-          imgPosition: '95% 115%',
-          imgFilter: '40%',
-        },{
-          roleId: 4,
-          roleName: 'Kirito',
-          roleImg: 'https://s3.bmp.ovh/imgs/2022/07/05/4ca6bba90fae3899.png',
-          imgSize: '165%',
-          imgPosition: '95% 115%',
-          imgFilter: '40%',
           detailDisplay: {
             animationTime: 600,
             easing: 'cubic-bezier(.69,.11,.25,.95)',
@@ -87,11 +73,14 @@ export default {
     }
   },
   computed: {
-    activeRoleIndex() {return this.$store.state.activeRole}
+    activeRoleIndex() {return this.$store.state.activeRole},
+    roleExpandAnimation() {return this.$store.state.roleExpandAnimation}
   },
   watch: {
     activeRoleIndex(newRoleIndex) {
-      this.expandRoleDetail(newRoleIndex)
+      if (newRoleIndex !== null && newRoleIndex !== undefined && newRoleIndex !== '') {
+        this.expandRoleDetail(newRoleIndex)
+      }
     }
   },
   methods: {
@@ -452,6 +441,10 @@ export default {
       // 与上一步同时动画 I 和 H
       // 与上一步同时动画遮罩的淡入
 
+      // 存储动画对象至 vuex
+
+      // 设置遮罩的点击事件(关闭)
+
 
       // console.log('role index: ', roleIndex)
       if( roleIndex!==null
@@ -532,404 +525,180 @@ export default {
             RoleDisplayMask.className = this.roleMaskClassName
             RoleDisplayMask.id = `${this.roleMaskClassName}-${domPosition}`
 
-            // 设置可动画的六边形盒子样式 set style*/
-            const maskStyle = 'position: fixed; top: var(--ZERO-PIXEL); left: var(--ZERO-PIXEL); background-color: var(--mask-gray); width: var(--MAX-SCREEN-WIDTH); height: var(--MAX-SCREEN-HEIGHT); pointer-events: all; z-index: var(--ROlE-MASK-Z-INDEX);'
+            const roleMaskPosition = 'position: fixed; top: var(--ZERO-PIXEL); left: var(--ZERO-PIXEL);'
+            const roleMaskSize = 'width: var(--MAX-SCREEN-WIDTH); height: var(--MAX-SCREEN-HEIGHT);'
+            const roleMaskBackgroundColor = 'background-color: var(--mask-gray);'
+            const roleMaskPointerEvent = 'pointer-events: all;'
+            const roleMaskMouseCursor = 'cursor: zoom-out;'
+
+            const roleMaskZIndex = 'z-index: var(--ROlE-MASK-Z-INDEX);'
+            // 设置遮罩样式 set style*/
+            const maskStyle = `${roleMaskPosition} ${roleMaskSize} ${roleMaskBackgroundColor} ${roleMaskPointerEvent} ${roleMaskMouseCursor} ${roleMaskZIndex}`
             RoleDisplayMask.setAttribute('style', maskStyle)
 
             dom.appendChild(RoleDisplayMask) // 创建遮罩
 
-            // 遮罩出现的动画
-            RoleDisplayMask.animate(
-                [
-                  {
-                    opacity: 0.1
-                  },
-                  {
-                    opacity: 0.9
-                  }
-                ],
-                {
-                  duration: 500,
-                  easing: 'ease-in-out',
-                  fill: 'both'
-                }
-            )
-
 
             // 设置背景六边形的动画
-            roleHexagonExpandableBox.animate([
-                  {
-
-                    clipPath: `${roleHexagonExpandableBox.style.clipPath}`,
-                    height: `${roleHexagonExpandableBox.offsetHeight}px`,
-                    width: `${roleHexagonExpandableBox.offsetWidth}px`,
-                    left: `${roleHexagonExpandableBox.style.left}`,
-                    top: `${roleHexagonExpandableBox.style.top}`,
-                    backgroundColor: `${roleHexagonExpandableBox.style.backgroundColor}`,
-                  },
-                  {
-                    clipPath: this.roleInfos[roleIndex-1].detailDisplay.hexagon.clipPath,
-                    height: this.roleInfos[roleIndex-1].detailDisplay.hexagon.height,
-                    width: this.roleInfos[roleIndex-1].detailDisplay.hexagon.width,
-                    left: this.roleInfos[roleIndex-1].detailDisplay.hexagon.left,
-                    top: this.roleInfos[roleIndex-1].detailDisplay.hexagon.top,
-                    backgroundColor: this.roleInfos[roleIndex-1].detailDisplay.hexagon.backgroundColor,
-                    boxShadow: this.roleInfos[roleIndex-1].detailDisplay.hexagon.innerBoxShadow,
-                  }
-                ],
-                {
-                  duration: this.roleInfos[roleIndex-1].detailDisplay.animationTime,
-                  direction: 'normal',
-                  easing: this.roleInfos[roleIndex-1].detailDisplay.easing,
-                  fill: 'forwards',
-                }
+            const roleHexagonAnimation = roleHexagonExpandableBox.animate([
+              {
+                clipPath: `${roleHexagonExpandableBox.style.clipPath}`,
+                height: `${roleHexagonExpandableBox.offsetHeight}px`,
+                width: `${roleHexagonExpandableBox.offsetWidth}px`,
+                left: `${roleHexagonExpandableBox.style.left}`,
+                top: `${roleHexagonExpandableBox.style.top}`,
+                backgroundColor: `${roleHexagonExpandableBox.style.backgroundColor}`,
+              },
+              {
+                clipPath: this.roleInfos[roleIndex-1].detailDisplay.hexagon.clipPath,
+                height: this.roleInfos[roleIndex-1].detailDisplay.hexagon.height,
+                width: this.roleInfos[roleIndex-1].detailDisplay.hexagon.width,
+                left: this.roleInfos[roleIndex-1].detailDisplay.hexagon.left,
+                top: this.roleInfos[roleIndex-1].detailDisplay.hexagon.top,
+                backgroundColor: this.roleInfos[roleIndex-1].detailDisplay.hexagon.backgroundColor,
+                boxShadow: this.roleInfos[roleIndex-1].detailDisplay.hexagon.innerBoxShadow,
+              }
+              ],
+              {
+                duration: this.roleInfos[roleIndex-1].detailDisplay.animationTime,
+                direction: 'normal',
+                easing: this.roleInfos[roleIndex-1].detailDisplay.easing,
+                fill: 'forwards',
+              }
             )
 
             // filter: drop-shadow(0px 0px 200px red);
             // box-shadow: 0 0 400px #0467ff54 inset;
 
 
-                    // 设置可扩展角色图片的动画 (位置)
-                    roleImageExpandableBox.animate([
-                          {
-                            height: `${roleImageExpandableBox.offsetHeight}px`,
-                            width: `${roleImageExpandableBox.offsetWidth}px`,
-                            left: `${roleImageExpandableBox.style.left}`,
-                            top: `${roleImageExpandableBox.style.top}`,
-                            clipPath: `${roleImageExpandableBox.style.clipPath}`,
-                          },
-                          {
-                            height: this.roleInfos[roleIndex-1].detailDisplay.image.height,
-                            width: this.roleInfos[roleIndex-1].detailDisplay.image.width,
-                            left: this.roleInfos[roleIndex-1].detailDisplay.image.left,
-                            top: this.roleInfos[roleIndex-1].detailDisplay.image.top,
-                            clipPath: this.roleInfos[roleIndex-1].detailDisplay.image.clipPath,
-                          }
-                        ],
-                        {
-                          duration: this.roleInfos[roleIndex-1].detailDisplay.animationTime,
-                          direction: 'normal',
-                          easing: this.roleInfos[roleIndex-1].detailDisplay.easing,
-                          fill: 'forwards',
-                        }
-                    )
-
-                    // 设置可扩展角色图片的动画 (尺寸)
-                    roleImageExpandableBox.animate([
-                          {
-                            backgroundSize: `${roleImageExpandableBox.style.backgroundSize}`,
-                            backgroundPosition: `${roleImageExpandableBox.style.backgroundPosition}`,
-                          },
-                          {
-                            backgroundSize: this.roleInfos[roleIndex-1].detailDisplay.image.backgroundSize,
-                            backgroundPosition: this.roleInfos[roleIndex-1].detailDisplay.image.backgroundPosition,
-                          }
-                        ],
-                        {
-                          duration: this.roleInfos[roleIndex-1].detailDisplay.animationTime / this.roleInfos[roleIndex-1].detailDisplay.image.sizeAnimationProportion,
-                          direction: 'normal',
-                          easing: this.roleInfos[roleIndex-1].detailDisplay.easing,
-                          fill: 'forwards',
-                        }
-                    )
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  }
-
-
-
-
-
-
-
-
-
-                }
-
-
-
+            // 设置可扩展角色图片的动画 (位置)
+            const roleImagePositionAnimation = roleImageExpandableBox.animate([
+              {
+                height: `${roleImageExpandableBox.offsetHeight}px`,
+                width: `${roleImageExpandableBox.offsetWidth}px`,
+                left: `${roleImageExpandableBox.style.left}`,
+                top: `${roleImageExpandableBox.style.top}`,
+                clipPath: `${roleImageExpandableBox.style.clipPath}`,
+              },
+              {
+                height: this.roleInfos[roleIndex-1].detailDisplay.image.height,
+                width: this.roleInfos[roleIndex-1].detailDisplay.image.width,
+                left: this.roleInfos[roleIndex-1].detailDisplay.image.left,
+                top: this.roleInfos[roleIndex-1].detailDisplay.image.top,
+                clipPath: this.roleInfos[roleIndex-1].detailDisplay.image.clipPath,
               }
+              ],
+              {
+                duration: this.roleInfos[roleIndex-1].detailDisplay.animationTime,
+                direction: 'normal',
+                easing: this.roleInfos[roleIndex-1].detailDisplay.easing,
+                fill: 'forwards',
+              }
+            )
+
+            // 设置可扩展角色图片的动画 (尺寸)
+            const roleImageSizeAnimation = roleImageExpandableBox.animate([
+              {
+                backgroundSize: `${roleImageExpandableBox.style.backgroundSize}`,
+                backgroundPosition: `${roleImageExpandableBox.style.backgroundPosition}`,
+              },
+              {
+                backgroundSize: this.roleInfos[roleIndex-1].detailDisplay.image.backgroundSize,
+                backgroundPosition: this.roleInfos[roleIndex-1].detailDisplay.image.backgroundPosition,
+              }
+              ],
+              {
+                duration: this.roleInfos[roleIndex-1].detailDisplay.animationTime / this.roleInfos[roleIndex-1].detailDisplay.image.sizeAnimationProportion,
+                direction: 'normal',
+                easing: this.roleInfos[roleIndex-1].detailDisplay.easing,
+                fill: 'forwards',
+              }
+            )
+
+
+            // 遮罩出现的动画
+            const roleMastAnimation = RoleDisplayMask.animate([
+              {
+                opacity: 0.1
+              },
+              {
+                opacity: 0.9
+              }
+              ],
+              {
+                duration: 500,
+                easing: 'ease-in-out',
+                fill: 'both'
+              }
+            )
+
+
+            // 把动画对象存储到vuex里
+            this.$store.commit('updateRoleExpandAnimation', {roleMastAnimation, roleHexagonAnimation, roleImagePositionAnimation, roleImageSizeAnimation})
+
+            // 给遮罩添加点击(关闭)事件
+            // 设置一个延迟，防抖
+            setTimeout(() => {
+              RoleDisplayMask.addEventListener('click', this.closeRoleDetail)
+            }, 300)
+          }
+        }
+      }
+    },
+    closeRoleDetail() {
+      // 角色详情页面关闭动画
+      const animations = this.roleExpandAnimation
+      const activeRoleIndex = this.activeRoleIndex
+      if (animations !== undefined && activeRoleIndex !== undefined) {
+        const roleMastAnimation = animations.roleMastAnimation
+        const roleHexagonAnimation = animations.roleHexagonAnimation
+        const roleImagePositionAnimation = animations.roleImagePositionAnimation
+        const roleImageSizeAnimation = animations.roleImageSizeAnimation
+
+
+        if (roleMastAnimation !== undefined && roleHexagonAnimation !== undefined && roleImagePositionAnimation !== undefined && roleImageSizeAnimation !== undefined) {
+          const animeFullTime = roleHexagonAnimation.currentTime
+          if (animeFullTime !== null) {
+            const roleHexagonOriginDom = document.getElementById(`${this.hexagonBoxClassName}-${activeRoleIndex}`)
+            const roleImageOriginDom = document.getElementById(`${this.roleImageClassName}-${activeRoleIndex}`)
+            const roleHexagonExpandableDom = document.getElementById(`${this.roleHexagonExpandableClassName}-${activeRoleIndex}`)
+            const roleImageExpandableDom = document.getElementById(`${this.roleImageExpandableClassName}-${activeRoleIndex}`)
+            const roleMaskDom = document.getElementsByClassName(this.roleMaskClassName)
+            if( roleHexagonOriginDom !== null && roleHexagonOriginDom !== undefined
+                && roleImageOriginDom !== null && roleImageOriginDom !== undefined
+                && roleHexagonExpandableDom !== null && roleHexagonExpandableDom !== undefined
+                && roleImageExpandableDom !== null && roleImageExpandableDom !== undefined
+                && roleMaskDom !== null && roleMaskDom !== undefined && roleMaskDom.length > 0 && roleMaskDom[0] !== null && roleMaskDom[0] !== undefined
+            ){
+              //移除遮罩上的监听器，防抖
+              roleMaskDom[0].removeEventListener('click', this.closeRoleDetail)
+
+              // 把 vuex 里存的动画都倒放一遍
+              roleMastAnimation.reverse()
+              roleHexagonAnimation.reverse()
+              roleImagePositionAnimation.reverse()
+              roleImageSizeAnimation.reverse()
+
+              // setTimeout 动画结束后
+              // 1. 显示原角色dom 、
+              // 2. 销毁遮罩、可动画角色六边形 和 可动画角色图片
+              // 3. 清除vuex中已点击的 activeRole 状态 (置空字符串)
+              setTimeout(() => {
+                roleHexagonExpandableDom.remove() //  移除可动画角色六边形
+                roleImageExpandableDom.remove() //  移除可动画角色图片
+                roleMaskDom[0].remove() // 移除遮罩
+                this.$store.commit('updateActiveRole', '')  // 清除vuex中已点击的 activeRole 状态 (置空字符串)
+                roleHexagonOriginDom.style.visibility = 'visible' // 设置原角色六边形为可见
+                roleImageOriginDom.style.visibility = 'visible' // 设置原角色图片可见
+              }, animeFullTime)
             }
 
+          }
 
-            /*expandRoleDetail(roleIndex) { // 在被点击的六边形的相同位置生成一个相同尺寸的绝对定位的六边形，然后使用FLIP制作动画*/
+        }
 
-    /*  const roleHexagonDom = document.getElementById(`${this.hexagonBoxClassName}-${roleIndex}`)*/
-    /*  const roleImageDom = document.getElementById(`${this.hexagonBoxClassName}-${roleIndex}`)*/
-
-    /*  if (roleHexagonDom !== null && roleHexagonDom !== undefined && roleImageDom !== null && roleImageDom !== undefined) {*/
-    /*    const roleHexagonDomStyle = roleHexagonDom.style*/
-    /*    const roleHexagonBoundingClientRect = roleHexagonDom.getBoundingClientRect()*/
-
-    /*    if (roleHexagonBoundingClientRect !== null && roleHexagonBoundingClientRect !== undefined) {*/
-    /*      const hexagonBoxTop = document.getElementById('role-hexagon-box-top')*/
-    /*      const hexagonBoxBottom = document.getElementById('role-hexagon-box-bottom')*/
-
-    /*      // 判断父级存在*/
-    /*      if (hexagonBoxTop !== undefined && hexagonBoxTop !== null && hexagonBoxBottom !== undefined && hexagonBoxBottom !== null) {*/
-    /*        const animateHexagonBoxClassName = this.animateHexagonBoxClassName  // 基本类名*/
-    /*        const animateHexagonBoxId = `${this.animateHexagonBoxClassName}-${roleIndex}`  //元素ID*/
-
-    /*        // 创建第六边形盒子起始dom*/
-    /*        const animateRoleHexagon = document.createElement('div')*/
-    /*        animateRoleHexagon.id = animateHexagonBoxId*/
-    /*        animateRoleHexagon.className = animateHexagonBoxClassName*/
-
-    /*        const roleHexagonDomOffsetTop = roleHexagonDom.offsetTop*/
-    /*        const roleHexagonDomOffsetLeft = roleHexagonDom.offsetLeft*/
-    /*        const roleHexagonDomWidth = roleHexagonBoundingClientRect.width*/
-    /*        const roleHexagonDomHeight = roleHexagonBoundingClientRect.height*/
-    /*        const roleHexagonDomClipPath = roleHexagonDomStyle.clipPath*/
-
-    /*        const animateRoleHexagonPosition = `position: absolute;`*/
-    /*        const animateRoleHexagonPositionTop = `top: ${roleHexagonDomOffsetTop}px;`*/
-    /*        const animateRoleHexagonPositionLeft = `left: ${roleHexagonDomOffsetLeft}px;`*/
-    /*        const animateRoleHexagonWidth = `width: ${roleHexagonDomWidth}px;`*/
-    /*        const animateRoleHexagonHeight = `height: ${roleHexagonDomHeight}px;`*/
-    /*        const animateRoleHexagonClipPath = `clip-path: ${roleHexagonDomClipPath};`*/
-
-    /*        // 设置可动画的六边形盒子样式 set style*/
-    /*        animateRoleHexagon.setAttribute('style', `${animateRoleHexagonPosition} ${animateRoleHexagonPositionTop} ${animateRoleHexagonPositionLeft} ${animateRoleHexagonWidth} ${animateRoleHexagonHeight} ${animateRoleHexagonClipPath}`)*/
-
-    /*        const animateDisplayShapeBoxClassName = this.animateDisplayShapeBoxClassName  // 基本类名*/
-    /*        const animateDisplayShapeBoxId = `${this.animateDisplayShapeBoxClassName}-${roleIndex}`  //元素ID*/
-
-    /*        // 创建形状盒子目标dom*/
-    /*        const animateRoleDisplayShape = document.createElement('div')*/
-    /*        animateRoleDisplayShape.id = animateDisplayShapeBoxId*/
-    /*        animateRoleDisplayShape.className = animateDisplayShapeBoxClassName*/
-
-    /*        const roleDisplayStyleList = this.roleInfos.filter(role => role.detailDisplay !== undefined && role.roleId === parseInt(roleIndex)) // 获取来自服务器的六边形样式信息*/
-    /*        // const roleImageStyleList = this.roleInfos.filter(role => role.detailImageDisplay !== undefined && role.roleId === parseInt(roleIndex)) // 获取来自服务器的六边形样式信息*/
-    /*        if (roleDisplayStyleList.length !== 0) { // 如果获取到了*/
-
-    /*          const roleDisplayStyle = roleDisplayStyleList[0].detailDisplay*/
-    /*          // const roleImageStyle = roleImageStyleList[0].detailImageDisplay*/
-
-    /*          const RoleDisplayShapeDomBackgroundColor = roleDisplayStyle.backgroundColor*/
-    /*          const RoleDisplayShapeDomTop = roleDisplayStyle.position.top*/
-    /*          const RoleDisplayShapeDomRight = roleDisplayStyle.position.right*/
-    /*          const RoleDisplayShapeDomWidth = roleDisplayStyle.size.width*/
-    /*          const RoleDisplayShapeDomHeight = roleDisplayStyle.size.height*/
-
-    /*          const animateRoleDisplayShapePosition = `position: fixed;`*/
-    /*          const animateRoleDisplayShapePositionTop = `top: ${RoleDisplayShapeDomTop};`*/
-    /*          const animateRoleDisplayShapePositionRight = `right: ${RoleDisplayShapeDomRight};`*/
-    /*          const animateRoleDisplayShapeWidth = `width: ${RoleDisplayShapeDomWidth};`*/
-    /*          const animateRoleDisplayShapeHeight = `height: ${RoleDisplayShapeDomHeight};`*/
-    /*          const animateRoleDisplayShapeZIndex = `z-index: var(--ROLE-DISPLAY-Z-INDEX);`*/
-
-    /*          // 设置可动画的六边形盒子样式 set style*/
-    /*          animateRoleDisplayShape.setAttribute('style', `${animateRoleDisplayShapePosition} ${animateRoleDisplayShapePositionTop} ${animateRoleDisplayShapePositionRight} ${animateRoleDisplayShapeWidth} ${animateRoleDisplayShapeHeight} ${animateRoleDisplayShapeZIndex}`)*/
-
-
-    /*          const roleImageDom = document.getElementById(`${this.roleImageClassName}-${roleIndex}`)  // 获取角色图片 dom*/
-    /*          if (roleImageDom !== null && roleImageDom !== undefined) { // 如果获取到了*/
-
-    /*            // 创建遮罩*/
-    /*            const RoleDisplayMask = document.createElement('div')*/
-    /*            RoleDisplayMask.className = 'role-mask'*/
-
-    /*            // 设置可动画的六边形盒子样式 set style*/
-    /*            const maskStyle = 'position: fixed; top: 0; left: 0; background-color: white; width: 100vw; height: 100vh; pointer-events: all; z-index: 500;'*/
-    /*            RoleDisplayMask.setAttribute('style', maskStyle)*/
-
-    /*            hexagonBoxTop.appendChild(RoleDisplayMask) // 创建遮罩*/
-    /*            hexagonBoxBottom.appendChild(RoleDisplayMask) // 创建遮罩*/
-
-    /*            // 遮罩出现的动画*/
-    /*            RoleDisplayMask.animate(*/
-    /*                [*/
-    /*                  {*/
-    /*                    opacity: 0.1*/
-    /*                  },*/
-    /*                  {*/
-    /*                    opacity: 0.8*/
-    /*                  }*/
-    /*                ],*/
-    /*                {*/
-    /*                  duration: 500,*/
-    /*                  easing: 'ease-in-out',*/
-    /*                  fill: 'both'*/
-    /*                }*/
-    /*            )*/
-
-    /*            // 在不同行上创建可动画六边形*/
-    /*            const line = roleIndex % 2*/
-    /*            if(line !== undefined && !isNaN(line)) {*/
-    /*              if (line === 1) {*/
-    /*                hexagonBoxTop.appendChild(animateRoleHexagon)*/
-    /*                hexagonBoxTop.appendChild(animateRoleDisplayShape)*/
-
-    /*              } else {*/
-    /*                hexagonBoxBottom.appendChild(animateRoleHexagon)*/
-    /*                hexagonBoxBottom.appendChild(animateRoleDisplayShape)*/
-    /*              }*/
-    /*            }*/
-
-    /*            roleHexagonDom.style.visibility = 'hidden'  // 将原六边形隐藏*/
-
-    /*            // 动画角色背景*/
-    /*            // 开始 FLIP 和变形动画*/
-    /*            // First: 获取当前元素位置属性*/
-    /*            const roleShapeFirst = animateRoleHexagon.getBoundingClientRect()*/
-    /*            // Last: 获取最终的位置属性*/
-    /*            const roleShapeLast = animateRoleDisplayShape.getBoundingClientRect()*/
-
-    /*            // 反转: 计算开始和终点的差异*/
-    /*            // 计算初始位置和最终位置的边界*/
-    /*            const deltaX = roleShapeFirst.left - roleShapeLast.left*/
-    /*            const deltaY = roleShapeFirst.top - roleShapeLast.top*/
-    /*            const deltaW = roleShapeFirst.width / roleShapeLast.width*/
-    /*            const deltaH = roleShapeFirst.height / roleShapeLast.height*/
-
-    /*            const targetShapeClipPath = roleDisplayStyle.clipPath*/
-
-    /*            // Play: 使原始从初始位置移动到最终位置*/
-    /*            animateRoleDisplayShape.animate(*/
-    /*              [*/
-    /*                {*/
-    /*                  transformOrigin: 'top left',*/
-    /*                  transform: `translate(${deltaX}px, ${deltaY}px) scale(${deltaW}, ${deltaH})`,*/
-    /*                  clipPath: roleHexagonDomClipPath,*/
-    /*                  backgroundColor: 'var(--hexagon-gray-opaque)',*/
-    /*                },*/
-    /*                {*/
-    /*                  transformOrigin: 'top left',*/
-    /*                  transform: 'none',*/
-    /*                  clipPath: targetShapeClipPath,*/
-    /*                  backgroundColor: RoleDisplayShapeDomBackgroundColor,*/
-    /*                }*/
-    /*              ],*/
-    /*              {*/
-    /*                duration: 500,*/
-    /*                easing: 'ease-in-out',*/
-    /*                fill: 'both'*/
-    /*              }*/
-    /*            )*/
-
-
-    /*            // 动画角色图像*/
-    /*            // 开始 FLIP 和变形动画*/
-    /*            // First: 获取当前元素位置属性*/
-    /*            const roleImageFirst = roleImageDom.getBoundingClientRect()*/
-    /*            // Last: 获取最终的位置属性*/
-    /*            const roleImageLast = roleShapeLast*/
-    /*            roleImageLast.height = roleImageLast.height * 2*/
-    /*            // console.log('first last', roleImageFirst, roleImageLast)*/
-
-
-
-
-    /*            // setTimeout( () => {*/
-    /*            //   const roleImageFirst = roleImageDom.getBoundingClientRect()*/
-    /*            //   // Last: 获取最终的位置属性*/
-    /*            //   const roleImageLast = animateRoleDisplayShape.getBoundingClientRect()*/
-    /*            //   roleImageLast.height = roleImageLast.height * 2*/
-    /*            //   // console.log('first last 2', roleImageFirst, roleImageLast)*/
-    /*            // }, 5000)*/
-
-    /*            console.log('first last2', roleImageFirst, roleImageLast)*/
-
-
-    /*            console.log('key frames', [*/
-    /*              {*/
-    /*                left: `${roleImageFirst.left}px`,*/
-    /*                top: `${roleImageFirst.top}px`,*/
-    /*                width: `${roleImageFirst.width}px`,*/
-    /*                height: `${roleImageFirst.height}px`*/
-    /*              },*/
-    /*              {*/
-    /*                left: `${roleImageLast.left}px`,*/
-    /*                top: `${roleImageLast.top}px`,*/
-    /*                width: `${roleImageLast.width}px`,*/
-    /*                height: `${roleImageFirst.height}px`*/
-    /*              }*/
-    /*            ],)*/
-
-
-
-    /*            // 开始动画*/
-    /*            roleImageDom.animate([*/
-    /*              {*/
-    /*                position: 'absolute',*/
-    /*                left: `${roleImageFirst.left}px`,*/
-    /*                // top: `${roleImageFirst.top}px`,*/
-    /*                width: `${roleImageFirst.width}px`,*/
-    /*                height: `${roleImageFirst.height}px`*/
-    /*              },*/
-    /*              {*/
-    /*                position: 'fixed',*/
-    /*                left: `${roleImageLast.left}px`,*/
-    /*                // top: `${roleImageLast.top}px`,*/
-    /*                width: `${roleImageLast.width}px`,*/
-    /*                height: `${roleImageFirst.height}px`*/
-    /*              }*/
-    /*            ],*/
-    /*            {*/
-    /*              duration: 500,*/
-    /*              easing: 'ease-in-out',*/
-    /*              fill: 'both'*/
-    /*             }*/
-    /*          )*/
-
-    /*            //*/
-    /*            // // 正转: 计算开始和终点的差异*/
-    /*            // // 计算初始位置和最终位置的边界*/
-    /*            // const ImageDeltaX = roleImageLast.left - roleImageFirst.left*/
-    /*            // const ImageDeltaY = roleImageLast.top - roleImageFirst.top*/
-    /*            // const ImageDeltaW = roleImageLast.width / roleImageFirst.width*/
-    /*            // const ImageDeltaH = roleImageLast.height / roleImageFirst.height*/
-    /*            //*/
-    /*            // console.log('ImageDelta', ImageDeltaX, ImageDeltaY, ImageDeltaW, ImageDeltaH)*/
-    /*            //*/
-    /*            // const roleImageOriginClipPath = roleImageDom.style.clipPath*/
-    /*            // const roleImageNewClipPath = roleImageStyle.clipPath*/
-    /*            //*/
-    /*            // console.log(`translate(${ImageDeltaX}px, ${ImageDeltaY}px) scale(${ImageDeltaW}, ${ImageDeltaH})`)*/
-    /*            //*/
-    /*            //*/
-    /*            // // 待办： 将图像变换改为基于 position: abs 的*/
-    /*            // // Play*/
-    /*            // roleImageDom.animate(*/
-    /*            //   [*/
-    //             //     {
-    //             //       transformOrigin: 'top left',
-    //             //       transform: `none`,
-    //             //       clipPath: roleImageOriginClipPath,
-    //             //       zIndex: 'var(--ROLE-DISPLAY-Z-INDEX)',
-    //             //     },
-    //             //     {
-    //             //       transformOrigin: 'top left',
-    //             //       transform: `translate(${ImageDeltaX}px, ${ImageDeltaY}px) scale(${ImageDeltaW}, ${ImageDeltaH})`,
-    //             //       clipPath: roleImageNewClipPath,
-    //             //       zIndex: 'var(--ROLE-DISPLAY-Z-INDEX)',
-    //             //     }
-    //             //   ],
-    //             //   {
-    //             //     duration: 500,
-    //             //     easing: 'ease-in-out',
-    //             //     fill: 'both'
-    //             //   }
-    //             // )
-    //
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
+      }
+    }
   },
   mounted() {
     this.initRoleHexagon()
