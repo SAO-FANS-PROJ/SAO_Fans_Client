@@ -6,6 +6,8 @@
 
 [demo](https://www.swordartonline.fans)  -  [演示](https://www.swordartonline.fans) 
 
+<img src="https://s2.loli.net/2022/09/19/Ja2nZO7gvLSYzqK.gif" >
+
 ### 待办:
 - [x] 鼠标移出时，设置六边形的 css 使自己不再接受鼠标事件；鼠标移入时，恢复所有六边形接受鼠标事件
 - [x] 角色点击后详情扩展动画
