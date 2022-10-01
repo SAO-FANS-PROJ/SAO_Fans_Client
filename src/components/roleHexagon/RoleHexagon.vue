@@ -28,6 +28,30 @@ export default {
           imgSize: '190%',
           imgPosition: '50% -240%',
           imgFilter: '50%',
+          detailDisplay: {
+            animationTime: 700,
+            easing: 'cubic-bezier(.69,.11,.25,.95)',
+            hexagon: {
+              height: `calc((40vh + 40vw) / 2.2)`,
+              width: `calc((40vh + 40vw) / 3.5)`,
+              left: `60vw`,
+              top: `20vh`,
+              backgroundColor: '#912824',
+              innerBoxShadow: '0 0 350px #00000080 inset',
+              clipPath: 'polygon(50% 0%, 100% 0%, 100% 100%, 50% 100%, 0% 100%, 0% 0%)',
+              //         polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)
+            },
+            image: {
+              height: `calc(((40vh + 40vw) / 4.3) * 2.5)`,   // 高等于宽*2.5 与角色图片没点击时是相同比例
+              width: `calc((40vh + 40vw) / 4.3)`,
+              left: `60vw`,
+              top: `calc(20vh - ((((40vh + 40vw) / 4.3) * 2.5) - ((40vh + 40vw) / 2.2))`,    // 如果要保持背景和图片的下边一致 top = 背景的top - (图片的高度 - 背景的高度)
+              backgroundSize: `148%`,
+              backgroundPosition: '43% 0%',
+              sizeAnimationProportion: 1, // 角色图片的缩放动画比位置变化动画快多少倍
+              clipPath: 'polygon(50% 0%, 100% 0%, 100% 100%, 50% 100%, 0% 100%, 0% 0%)',
+            }
+          },
         },{
           roleId: 2,
           roleName: 'Kirito',
@@ -42,7 +66,7 @@ export default {
               height: `calc((40vh + 40vw) / 2)`,
               width: `calc((40vh + 40vw) / 1.5)`,
               left: `50vw`,
-              top: `20vh`,
+              top: `15vh`,
               backgroundColor: 'white',
               innerBoxShadow: '0 0 350px #0467FF54 inset',
               clipPath: 'polygon(100% 60%, 100% 60%, 100% 60%, 10% 100%, 0% 70%, 0% 70%)',
@@ -51,7 +75,7 @@ export default {
               height: `calc(((40vh + 40vw) / 2.5) * 2.5)`,   // 高等于宽*2.5 与角色图片没点击时是相同比例
               width: `calc((40vh + 40vw) / 2.5)`,
               left: `50vw`,
-              top: `calc(20vh - calc((((40vh + 40vw) / 2.5) * 2.5) - ((40vh + 40vw) / 2)))`,    // 如果要保持背景和图片的下边一致 top = 背景的top - (图片的高度 - 背景的高度)
+              top: `calc(15vh - calc((((40vh + 40vw) / 2.5) * 2.5) - ((40vh + 40vw) / 2)))`,    // 如果要保持背景和图片的下边一致 top = 背景的top - (图片的高度 - 背景的高度)
               backgroundSize: `100%`,
               backgroundPosition: '95% 95%',
               sizeAnimationProportion: 1, // 角色图片的缩放动画比位置变化动画快多少倍
@@ -447,16 +471,23 @@ export default {
 
 
       // console.log('role index: ', roleIndex)
+
+      const animationTime = this.roleInfos[roleIndex-1].detailDisplay.animationTime
+      const sizeAnimationProportion = this.roleInfos[roleIndex-1].detailDisplay.image.sizeAnimationProportion
+
       if( roleIndex!==null
           && this.roleInfos[roleIndex-1].detailDisplay !== undefined
           && this.roleInfos[roleIndex-1].detailDisplay.hexagon !== undefined
           && this.roleInfos[roleIndex-1].detailDisplay.image !== undefined
-          && this.roleInfos[roleIndex-1].detailDisplay.animationTime !== undefined && this.roleInfos[roleIndex-1].detailDisplay.animationTime !== null
+          && animationTime !== undefined && animationTime !== null
           && this.roleInfos[roleIndex-1].detailDisplay.easing !== undefined
+          && sizeAnimationProportion !== undefined && sizeAnimationProportion !== null
         ){
 
         const roleHexagonDom = document.getElementById(`${this.hexagonBoxClassName}-${roleIndex}`)
         const roleImageDom = document.getElementById(`${this.roleImageClassName}-${roleIndex}`)
+
+
 
         if ( roleHexagonDom !== null && roleHexagonDom !== undefined && roleImageDom !== null && roleImageDom !== undefined ) {
           const roleHexagonClient = roleHexagonDom.getBoundingClientRect()
@@ -560,7 +591,7 @@ export default {
               }
               ],
               {
-                duration: this.roleInfos[roleIndex-1].detailDisplay.animationTime,
+                duration: animationTime,
                 direction: 'normal',
                 easing: this.roleInfos[roleIndex-1].detailDisplay.easing,
                 fill: 'forwards',
@@ -589,7 +620,7 @@ export default {
               }
               ],
               {
-                duration: this.roleInfos[roleIndex-1].detailDisplay.animationTime,
+                duration: animationTime,
                 direction: 'normal',
                 easing: this.roleInfos[roleIndex-1].detailDisplay.easing,
                 fill: 'forwards',
@@ -608,7 +639,7 @@ export default {
               }
               ],
               {
-                duration: this.roleInfos[roleIndex-1].detailDisplay.animationTime / this.roleInfos[roleIndex-1].detailDisplay.image.sizeAnimationProportion,
+                duration: animationTime / sizeAnimationProportion,
                 direction: 'normal',
                 easing: this.roleInfos[roleIndex-1].detailDisplay.easing,
                 fill: 'forwards',
@@ -626,7 +657,7 @@ export default {
               }
               ],
               {
-                duration: 500,
+                duration: animationTime * 0.8,  // 遮罩的速度更快一些
                 easing: 'ease-in-out',
                 fill: 'both'
               }
@@ -692,11 +723,8 @@ export default {
                 roleImageOriginDom.style.visibility = 'visible' // 设置原角色图片可见
               }, animeFullTime)
             }
-
           }
-
         }
-
       }
     }
   },
@@ -749,24 +777,7 @@ export default {
 
     /* 阻止六边形盒子的鼠标事件，但是六边形本身显示声明了不阻止鼠标事件响应，因此实现了隔代响应；即鼠标移动到六边形上时是有反应的，但装六边形的父级(装六边形的盒子)并不会遮挡响应 */
     pointer-events: none;
-
-    /*background-color: #4642B987;*/
-
-    /*overflow: hidden;*/
   }
 
-  .hexagon {
-
-    float: left;
-    margin-right: var(--HEXAGON-MARGIN-RIGHT);
-
-    width: var(--HEXAGON-WIDTH);
-    height: var(--HEXAGON-HEIGHT);
-
-    /*clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);  !* hexagon *!*/
-    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);  /* hexagon */
-
-    background-color: var(--hexagon-gray-opaque);
-  }
 
 </style>
