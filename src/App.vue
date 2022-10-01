@@ -23,7 +23,7 @@ body{
 body{
   --white: white;
   --darkness: #010A1AFF;
-  --mask-gray: #4C4C4CFF;
+  --mask-gray: #3A3A3AFF;
 
   --main-background-color: #EEEEEEFF;
 
